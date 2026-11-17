@@ -1,0 +1,10 @@
+# Experiment design shared by every baseline, scenario and sensitivity run (T4.1.3).
+# Not a line parameter: numbers cite the ticket that chose them (see docs/verification.md s3).
+mode: terminating  # one campaign from an empty, clean line until every batch is packed
+seed: 20261116  # design: T4.1.3
+# Pilot of 20 replications needed n = 15 for a 95% CI half-width <= 2% of the mean on the
+# primary metrics (good_per_ppt_hour, line_oee). 30 adds margin for pilot-variance error.
+n_reps: 30  # design: T4.1.3
+ci_level: 0.95  # design: T4.1.3
+rel_half_width_target: 0.02  # design: T4.1.3
+primary_metrics: [good_per_ppt_hour, line_oee]

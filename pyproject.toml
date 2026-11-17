@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ffdt"
+version = "0.1.0"
+description = "Pharma fill-finish digital twin: discrete-event simulation of an aseptic vial line"
+requires-python = ">=3.12"
+# Runtime pins live in requirements.txt; this list is the direct-dependency intent.
+dependencies = ["simpy", "numpy", "pandas", "scipy", "pydantic", "pyyaml", "joblib", "pyarrow", "plotly", "streamlit"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q -m 'not slow'"
+markers = ["slow: long analytical checks; run with python tasks.py verify"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests", "app", "tools"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]  # the formatter wraps code; long docstring/comment lines are tolerated
+
+[tool.ruff.lint.per-file-ignores]
+"tools/*.py" = ["E701", "E702"]  # compact one-line guards in small stdlib scripts

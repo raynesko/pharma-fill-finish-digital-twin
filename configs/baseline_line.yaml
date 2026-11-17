@@ -1,0 +1,94 @@
+# Baseline line configuration (draft until frozen as baseline-v1.0 in T4.2.1).
+# Every numeric value cites a param_id in data/raw/benchmark_sources.csv; most are
+# engineering-judgment modes within vendor/trade ranges (see docs/assumptions.md).
+# SIMULATED, BENCHMARK-PARAMETERIZED LINE. NOT PLANT DATA.
+name: baseline
+version: "0.1-draft"
+sublot_vials: 100  # src: B-034
+buffer_vials: 2000  # src: B-035
+
+calendar:
+  days: 5  # src: B-031
+  shifts_per_day: 2  # src: B-031
+  shift_min: 480  # src: B-031
+  break_min_per_shift: 60  # src: B-032
+
+stations:
+  - name: washer
+    changeover_scope: glass
+    kind: machine
+    rate_vpm: 350  # src: B-001
+    failures: {mtbf_min: 4800, mttr_mean_min: 75, mttr_cv: 0.8}  # src: B-011 B-012 B-013
+    minor_stops: {mean_between_min: 45, mean_duration_min: 1.5}  # src: B-014 B-015
+  - name: tunnel
+    changeover_scope: glass
+    kind: tunnel
+    rate_vpm: 350  # src: B-002
+    residence_min: 30  # src: B-010
+    failures: {mtbf_min: 4800, mttr_mean_min: 75, mttr_cv: 0.8}  # src: B-011 B-012 B-013
+  - name: filler
+    changeover_scope: full
+    kind: machine
+    rate_vpm: 240  # src: B-003 B-004
+    failures: {mtbf_min: 4800, mttr_mean_min: 75, mttr_cv: 0.8}  # src: B-011 B-012 B-013
+    minor_stops: {mean_between_min: 45, mean_duration_min: 1.5}  # src: B-014 B-015
+  - name: capper
+    kind: machine
+    rate_vpm: 300  # src: B-005
+    failures: {mtbf_min: 4800, mttr_mean_min: 75, mttr_cv: 0.8}  # src: B-011 B-012 B-013
+    minor_stops: {mean_between_min: 45, mean_duration_min: 1.5}  # src: B-014 B-015
+  - name: avi
+    kind: inspection
+    rate_vpm: 300  # src: B-006
+    failures: {mtbf_min: 4800, mttr_mean_min: 75, mttr_cv: 0.8}  # src: B-011 B-012 B-013
+    minor_stops: {mean_between_min: 45, mean_duration_min: 1.5}  # src: B-014 B-015
+  - name: labeler
+    kind: machine
+    rate_vpm: 300  # src: B-008
+    failures: {mtbf_min: 4800, mttr_mean_min: 75, mttr_cv: 0.8}  # src: B-011 B-012 B-013
+    minor_stops: {mean_between_min: 45, mean_duration_min: 1.5}  # src: B-014 B-015
+  - name: cartoner
+    kind: machine
+    rate_vpm: 280  # src: B-009
+    failures: {mtbf_min: 4800, mttr_mean_min: 75, mttr_cv: 0.8}  # src: B-011 B-012 B-013
+    minor_stops: {mean_between_min: 45, mean_duration_min: 1.5}  # src: B-014 B-015
+# Station 8, manual re-inspection, is an offline resource pool sized by staffing.inspector
+# with rate quality.manual_rate_vpm_per_inspector (A-017, A-034).
+
+products: [prod_a, prod_b]
+formats: [vial_2r, vial_10r]
+
+changeovers:
+  same_product: {low_min: 45, mode_min: 90, high_min: 150}  # src: B-017
+  format_change: {low_min: 90, mode_min: 180, high_min: 300}  # src: B-019
+  product_change: {low_min: 390, mode_min: 600, high_min: 900}  # src: B-018
+  scale: 1.0  # src: B-021
+
+# One weekly campaign: 6 x 100,000 vials, 2 products x 2 formats (A-039).
+schedule:
+  - {product: prod_a, format: vial_2r, size_vials: 100000}  # src: B-036
+  - {product: prod_a, format: vial_2r, size_vials: 100000}  # src: B-036
+  - {product: prod_a, format: vial_10r, size_vials: 100000}  # src: B-036
+  - {product: prod_b, format: vial_10r, size_vials: 100000}  # src: B-036
+  - {product: prod_b, format: vial_10r, size_vials: 100000}  # src: B-036
+  - {product: prod_b, format: vial_2r, size_vials: 100000}  # src: B-036
+
+staffing:
+  operator: 4  # src: B-033
+  mechanic: 1  # src: B-033
+  inspector: 2  # src: B-033
+
+quality:
+  defect_frac: 0.002  # src: B-022
+  avi_detect_frac: 0.85  # src: B-023
+  avi_false_reject_frac: 0.01  # src: B-024
+  manual_confirm_frac: 0.95  # src: B-025
+  manual_rate_vpm_per_inspector: 5  # src: B-007
+  fill_weight_reject_frac: 0.001  # src: B-026
+
+qa:
+  reviewers: 2  # src: B-028
+  review_min_min: 480  # src: B-027
+  review_mean_min: 2880  # src: B-027
+  review_cv: 0.8  # src: B-013 B-027
+  release_hold_min: 0  # src: B-029

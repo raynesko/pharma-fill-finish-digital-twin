@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+.coverage
+htmlcov/
+data/processed/*
+!data/processed/.gitkeep
+results/*
+!results/.gitkeep
+.env
+.claude/settings.local.json
