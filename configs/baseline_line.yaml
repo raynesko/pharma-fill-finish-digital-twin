@@ -1,9 +1,10 @@
-# Baseline line configuration (draft until frozen as baseline-v1.0 in T4.2.1).
+# Baseline line configuration, FROZEN as baseline-v1.0 (T4.2.1, 2026-11-17).
+# Do not edit: any change needs version 1.1 and a changelog entry in docs/baseline_definition.md.
 # Every numeric value cites a param_id in data/raw/benchmark_sources.csv; most are
 # engineering-judgment modes within vendor/trade ranges (see docs/assumptions.md).
 # SIMULATED, BENCHMARK-PARAMETERIZED LINE. NOT PLANT DATA.
 name: baseline
-version: "0.1-draft"
+version: "1.0"
 sublot_vials: 100  # src: B-034
 buffer_vials: 2000  # src: B-035
 

@@ -469,10 +469,10 @@ _Story rollup: 4.5 h_
 - Story: S4.2
 - Description: Define the as-is line precisely and freeze it. Any later change to baseline parameters requires a v1.1 with a changelog.
 - Acceptance criteria:
-  - [ ] Git tag baseline-v1.0 created
-  - [ ] Config hash recorded in docs/baseline_definition.md
-  - [ ] One page states products, schedule, staffing, OEE definition, and what baseline means (as-is configured line, not a real plant)
-  - [ ] All verification tests pass at the tag
+  - [x] Git tag baseline-v1.0 created
+  - [x] Config hash recorded in docs/baseline_definition.md
+  - [x] One page states products, schedule, staffing, OEE definition, and what baseline means (as-is configured line, not a real plant)
+  - [x] All verification tests pass at the tag
 - Dependencies: T4.1.1, T4.1.2, T4.1.3
 - Estimate: 0.5 h (S)
 - Priority: P0

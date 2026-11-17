@@ -34,7 +34,7 @@ def main() -> None:
     q = L.queue_stats(line.export())
     rows += [
         "",
-        "Little's Law on every buffer, baseline draft config, seed 20261116, replication 0"
+        "Little's Law on every buffer, baseline v1.0, seed 20261116, replication 0"
         " (L time-weighted; λ arrivals per minute; W from matched entry/exit times):",
         "",
         "| Buffer | L (sub-lots) | λ (per min) | W (min) | λW | Rel. error |",
