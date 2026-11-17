@@ -1,0 +1,7 @@
+# SC-04: every changeover 50% shorter. ASSUMPTION, not a measured SMED result. Hypothesis H4a.
+name: sc04_changeover_m50
+description: "Changeover time -50% (SMED-style assumption)"
+family: SC-04
+exploratory: false
+overrides:
+  changeovers: {scale: 0.5}  # src: B-021

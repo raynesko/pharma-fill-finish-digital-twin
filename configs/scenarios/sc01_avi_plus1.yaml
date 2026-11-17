@@ -1,0 +1,8 @@
+# SC-01: add a second automated visual inspection (AVI) machine. Hypotheses H1a, H1b.
+name: sc01_avi_plus1
+description: "Inspection capacity +1: two identical AVI units share the buffers"
+family: SC-01
+exploratory: false
+overrides:
+  station_overrides:
+    avi: {count: 2}  # design: T5.1.1

@@ -1,0 +1,20 @@
+# SC-02 x0.5: every baseline batch split into two identical 50,000-vial batches. Same sequence,
+# same total (600,000) and mix; only the number of batches (12 vs 6) changes. Hypotheses H2a, H2b.
+name: sc02_batch_x0p5
+description: "Batch size x0.5: 12 batches of 50,000 vials, same mix and sequence"
+family: SC-02
+exploratory: false
+overrides:
+  schedule:
+    - {product: prod_a, format: vial_2r, size_vials: 50000}  # design: T5.1.1
+    - {product: prod_a, format: vial_2r, size_vials: 50000}  # design: T5.1.1
+    - {product: prod_a, format: vial_2r, size_vials: 50000}  # design: T5.1.1
+    - {product: prod_a, format: vial_2r, size_vials: 50000}  # design: T5.1.1
+    - {product: prod_a, format: vial_10r, size_vials: 50000}  # design: T5.1.1
+    - {product: prod_a, format: vial_10r, size_vials: 50000}  # design: T5.1.1
+    - {product: prod_b, format: vial_10r, size_vials: 50000}  # design: T5.1.1
+    - {product: prod_b, format: vial_10r, size_vials: 50000}  # design: T5.1.1
+    - {product: prod_b, format: vial_10r, size_vials: 50000}  # design: T5.1.1
+    - {product: prod_b, format: vial_10r, size_vials: 50000}  # design: T5.1.1
+    - {product: prod_b, format: vial_2r, size_vials: 50000}  # design: T5.1.1
+    - {product: prod_b, format: vial_2r, size_vials: 50000}  # design: T5.1.1

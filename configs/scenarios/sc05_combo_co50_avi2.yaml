@@ -1,0 +1,9 @@
+# SC-05 (exploratory, not Holm-adjusted): changeover -50% plus a second AVI unit. Hypothesis H5.
+name: sc05_combo_co50_avi2
+description: "Combination: changeover -50% and AVI +1"
+family: SC-05
+exploratory: true
+overrides:
+  changeovers: {scale: 0.5}  # src: B-021
+  station_overrides:
+    avi: {count: 2}  # design: T5.1.1

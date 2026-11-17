@@ -1,0 +1,13 @@
+# SC-02 "x2" (realized x1.5, amendment A3): consecutive identical baseline batches merged. Same total,
+# mix and sequence; 4 batches (mean 150,000 vials) instead of 6. Removes the two same-product
+# clearances; format and product changes are unchanged. Hypotheses H2a, H2b.
+name: sc02_batch_x2
+description: "Batch size up: merge identical neighbours, 4 batches (mean 150,000 vials)"
+family: SC-02
+exploratory: false
+overrides:
+  schedule:
+    - {product: prod_a, format: vial_2r, size_vials: 200000}  # design: T5.1.1
+    - {product: prod_a, format: vial_10r, size_vials: 100000}  # design: T5.1.1
+    - {product: prod_b, format: vial_10r, size_vials: 200000}  # design: T5.1.1
+    - {product: prod_b, format: vial_2r, size_vials: 100000}  # design: T5.1.1

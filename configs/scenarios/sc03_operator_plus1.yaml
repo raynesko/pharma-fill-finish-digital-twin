@@ -1,0 +1,7 @@
+# SC-03: operator +1 (baseline 4). Hypotheses H3a, H3b.
+name: sc03_operator_plus1
+description: "Staffing: operators 4 -> 5"
+family: SC-03
+exploratory: false
+overrides:
+  staffing: {operator: 5}  # design: T5.1.1

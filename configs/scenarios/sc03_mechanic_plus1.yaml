@@ -1,0 +1,8 @@
+# SC-03: mechanic +1 (baseline 1). Mechanic -1 (= 0) is infeasible: repairs never start and the
+# campaign cannot finish (amendment A4). Hypotheses H3a, H3b.
+name: sc03_mechanic_plus1
+description: "Staffing: mechanics 1 -> 2"
+family: SC-03
+exploratory: false
+overrides:
+  staffing: {mechanic: 2}  # design: T5.1.1

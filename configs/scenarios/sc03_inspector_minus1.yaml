@@ -1,0 +1,7 @@
+# SC-03: inspector -1 (baseline 2). Hypotheses H3a, H3b.
+name: sc03_inspector_minus1
+description: "Staffing: inspectors 2 -> 1"
+family: SC-03
+exploratory: false
+overrides:
+  staffing: {inspector: 1}  # design: T5.1.1

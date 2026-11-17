@@ -12,10 +12,10 @@ TASKS = {
     "index": [[PY, "tools/build_index.py"]],
     "verify": [[PY, "-m", "pytest", "-m", "slow"], [PY, "tools/verification_report.py"]],
     # filled in by later tickets:
-    "scenarios": [[PY, "-c", "raise SystemExit('make scenarios is implemented in T5.1.2')"]],
+    "scenarios": [[PY, "-m", "ffdt.experiments.scenarios"]],
     "app": [[PY, "-m", "streamlit", "run", "app/streamlit_app.py"]],
 }
-TASKS["all"] = TASKS["lint"] + TASKS["test"] + TASKS["scenarios"]  # extended in T7.1.3
+TASKS["all"] = TASKS["lint"] + TASKS["test"]  # scenarios run separately (T5.1.2); T7.1.3
 
 if __name__ == "__main__":
     name = sys.argv[1] if len(sys.argv) > 1 else "test"
