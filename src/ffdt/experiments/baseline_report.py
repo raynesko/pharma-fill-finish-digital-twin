@@ -216,3 +216,10 @@ def markdown(d: dict) -> str:
         "",
     ]
     return "\n".join(out)
+
+
+if __name__ == "__main__":
+    # same outputs as notebooks/05_baseline_report.ipynb, without the figures
+    root = Path(__file__).resolve().parents[3]
+    d = write(root / "results", root / "reports" / "results_baseline.json")
+    (root / "reports" / "baseline.md").write_text(markdown(d), encoding="utf-8")

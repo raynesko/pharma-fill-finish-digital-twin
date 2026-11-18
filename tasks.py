@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cross-platform task runner (Windows has no make). Usage: python tasks.py <test|lint|fix|verify|scenarios|app|all>."""
+"""Cross-platform task runner (Windows has no make). Usage: python tasks.py <test|lint|fix|verify|scenarios|results|app|all>."""
 
 import subprocess
 import sys
@@ -15,7 +15,13 @@ TASKS = {
     "scenarios": [[PY, "-m", "ffdt.experiments.scenarios"]],
     "app": [[PY, "-m", "streamlit", "run", "app/streamlit_app.py"]],
 }
-TASKS["all"] = TASKS["lint"] + TASKS["test"]  # scenarios run separately (T5.1.2); T7.1.3
+# full pipeline from an empty results/ folder to reports/results_final.json (about 25 min on
+# 16 cores; sensitivity is most of it). Fixed seeds, so the numbers reproduce exactly.
+TASKS["results"] = [
+    [PY, "-m", f"ffdt.experiments.{m}"]
+    for m in ("scenarios", "baseline_report", "stats", "bottleneck", "sensitivity", "final")
+]
+TASKS["all"] = TASKS["lint"] + TASKS["test"] + TASKS["results"]  # T7.1.3
 
 if __name__ == "__main__":
     name = sys.argv[1] if len(sys.argv) > 1 else "test"
