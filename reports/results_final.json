@@ -1,0 +1,446 @@
+{
+  "label": "Simulated, benchmark-parameterized. Not plant data.",
+  "number_type": "RESULT",
+  "frozen": "2026-11-18",
+  "git_sha_at_build": "2356d03de371+dirty",
+  "sources": {
+    "baseline": "reports/results_baseline.json",
+    "scenarios": "results/<scenario>/*.parquet (python tasks.py scenarios)",
+    "comparison": "results/comparison.csv (python -m ffdt.experiments.stats)",
+    "bottleneck": "results/bottleneck_verdicts.csv (python -m ffdt.experiments.bottleneck)",
+    "preregistration": "docs/scenario_matrix.md, docs/domain/scenario_hypotheses.md"
+  },
+  "practical_threshold": "TARGET: +3% good vials per PPT hour or +2 OEE points",
+  "baseline": {
+    "line_oee": {
+      "mean": 0.57307,
+      "ci_low": 0.564348,
+      "ci_high": 0.581791
+    },
+    "good_per_ppt_hour": {
+      "mean": 8252.204158,
+      "ci_low": 8126.612331,
+      "ci_high": 8377.795984
+    },
+    "makespan_h": {
+      "mean": 161.668545,
+      "ci_low": 152.902674,
+      "ci_high": 170.434415
+    },
+    "mean_lead_time_h": {
+      "mean": 89.16968,
+      "ci_low": 78.569154,
+      "ci_high": 99.770207
+    },
+    "changeover_share": 0.273722,
+    "blocked_share": 0.100051,
+    "n_reps": 30,
+    "config_hash": "2f9b035c9964",
+    "seed": 20261116
+  },
+  "bottleneck": {
+    "constraint": "filler",
+    "methods_agreeing_of_4": 4,
+    "constraint_sole_share": 0.6193386857135107,
+    "secondary": "cartoner",
+    "secondary_reps": 30,
+    "secondary_sole_plus_shifting_share": 0.2543729591053411,
+    "scenarios_shifting_constraint": []
+  },
+  "scenarios": [
+    {
+      "scenario": "sc05_combo_co50_avi2",
+      "plain_name": "Changeover -50% plus second AVI (exploratory)",
+      "family": "SC-05",
+      "set": "exploratory",
+      "good_per_ppt_hour_diff": 2112.6026513088536,
+      "pct_diff": 0.2560046517167632,
+      "pct_ci_low": 0.249970996315064,
+      "pct_ci_high": 0.2620383071184624,
+      "p": 1.3629235516336432e-36,
+      "p_holm": null,
+      "practical": true,
+      "bootstrap_agrees": true,
+      "paired_half_width": 49.79095619253167,
+      "unpaired_half_width": 186.20449497055012,
+      "oee_points_diff": 14.670851745200366,
+      "changeover_share_points_diff": -10.169358858956569,
+      "lead_time_h_diff": -5.46152396728525,
+      "lead_time_h_ci": [
+        -8.208645023071952,
+        -2.714402911498547
+      ]
+    },
+    {
+      "scenario": "sc04_changeover_m50",
+      "plain_name": "Cut every changeover by 50% (SMED, ASSUMPTION)",
+      "family": "SC-04",
+      "set": "main",
+      "good_per_ppt_hour_diff": 2045.059356427683,
+      "pct_diff": 0.247819772430001,
+      "pct_ci_low": 0.24045200601804045,
+      "pct_ci_high": 0.2551875388419615,
+      "p": 1.1112578903312397e-33,
+      "p_holm": 1.0001321012981157e-32,
+      "practical": true,
+      "bootstrap_agrees": true,
+      "paired_half_width": 60.80031261835427,
+      "unpaired_half_width": 195.55250944531306,
+      "oee_points_diff": 14.20180108630335,
+      "changeover_share_points_diff": -10.278670229971649,
+      "lead_time_h_diff": -5.376589889352357,
+      "lead_time_h_ci": [
+        -8.06251053679522,
+        -2.6906692419094944
+      ]
+    },
+    {
+      "scenario": "sc04_changeover_m25",
+      "plain_name": "Cut every changeover by 25% (SMED, ASSUMPTION)",
+      "family": "SC-04",
+      "set": "main",
+      "good_per_ppt_hour_diff": 914.7144295119268,
+      "pct_diff": 0.11084486181176514,
+      "pct_ci_low": 0.10775200042855619,
+      "pct_ci_high": 0.1139377231949741,
+      "p": 1.7829729645629987e-34,
+      "p_holm": 1.7829729645629987e-33,
+      "practical": true,
+      "bootstrap_agrees": true,
+      "paired_half_width": 25.52292356596331,
+      "unpaired_half_width": 182.25637775093728,
+      "oee_points_diff": 6.352183538277269,
+      "changeover_share_points_diff": -4.5582883371179514,
+      "lead_time_h_diff": -4.3931471604688195,
+      "lead_time_h_ci": [
+        -6.300631336105304,
+        -2.4856629848323353
+      ]
+    },
+    {
+      "scenario": "sc02_batch_x2",
+      "plain_name": "Merge identical neighbouring batches (4 batches)",
+      "family": "SC-02",
+      "set": "main",
+      "good_per_ppt_hour_diff": 487.20348029305393,
+      "pct_diff": 0.05903919376904336,
+      "pct_ci_low": 0.043604847253225255,
+      "pct_ci_high": 0.07447354028486146,
+      "p": 1.2552028294556523e-08,
+      "p_holm": 6.27601414727826e-08,
+      "practical": true,
+      "bootstrap_agrees": true,
+      "paired_half_width": 127.3673784904972,
+      "unpaired_half_width": 196.45822305767382,
+      "oee_points_diff": 3.3833575020350963,
+      "changeover_share_points_diff": -3.0391763744766176,
+      "lead_time_h_diff": 8.471817946720183,
+      "lead_time_h_ci": [
+        2.9354276385894726,
+        14.008208254850892
+      ]
+    },
+    {
+      "scenario": "sc03_operator_plus1",
+      "plain_name": "One more line operator",
+      "family": "SC-03",
+      "set": "main",
+      "good_per_ppt_hour_diff": 291.74169541163053,
+      "pct_diff": 0.03535318441394568,
+      "pct_ci_low": 0.03049143876226162,
+      "pct_ci_high": 0.040214930065629734,
+      "p": 4.186972055325203e-15,
+      "p_holm": 2.512183233195122e-14,
+      "practical": true,
+      "bootstrap_agrees": true,
+      "paired_half_width": 40.120117680910425,
+      "unpaired_half_width": 178.37755997299624,
+      "oee_points_diff": 2.0259839959141015,
+      "changeover_share_points_diff": 0.9729590800311317,
+      "lead_time_h_diff": -3.1236217310531447,
+      "lead_time_h_ci": [
+        -4.620941133099915,
+        -1.626302329006374
+      ]
+    },
+    {
+      "scenario": "sc01_avi_plus1",
+      "plain_name": "Add a second AVI machine",
+      "family": "SC-01",
+      "set": "main",
+      "good_per_ppt_hour_diff": 20.284392843673412,
+      "pct_diff": 0.0024580575632684063,
+      "pct_ci_low": -0.0014837185676032634,
+      "pct_ci_high": 0.006399833694140077,
+      "p": 0.2122946838284913,
+      "p_holm": 0.8491787353139651,
+      "practical": false,
+      "bootstrap_agrees": true,
+      "paired_half_width": 32.52834137622885,
+      "unpaired_half_width": 169.59696181551845,
+      "oee_points_diff": 0.14086383919217496,
+      "changeover_share_points_diff": 0.06483554603098564,
+      "lead_time_h_diff": -0.00242940924676347,
+      "lead_time_h_ci": [
+        -0.19308502145302364,
+        0.1882262029594967
+      ]
+    },
+    {
+      "scenario": "sc03_mechanic_plus1",
+      "plain_name": "One more mechanic",
+      "family": "SC-03",
+      "set": "main",
+      "good_per_ppt_hour_diff": 4.159680964576759,
+      "pct_diff": 0.0005040690808229224,
+      "pct_ci_low": -0.00048814965829700556,
+      "pct_ci_high": 0.0014962878199428504,
+      "p": 0.30738040607995504,
+      "p_holm": 0.9221412182398652,
+      "practical": false,
+      "bootstrap_agrees": false,
+      "paired_half_width": 8.187991604395643,
+      "unpaired_half_width": 173.61938991355544,
+      "oee_points_diff": 0.028886673365116817,
+      "changeover_share_points_diff": 0.011742562174460272,
+      "lead_time_h_diff": -0.005379546736798109,
+      "lead_time_h_ci": [
+        -0.017577717917970796,
+        0.006818624444374576
+      ]
+    },
+    {
+      "scenario": "sc03_inspector_minus1",
+      "plain_name": "One fewer manual inspector",
+      "family": "SC-03",
+      "set": "main",
+      "good_per_ppt_hour_diff": 0.11445852016913705,
+      "pct_diff": 1.387005434919916e-05,
+      "pct_ci_low": -5.173394646527887e-05,
+      "pct_ci_high": 7.947405516367719e-05,
+      "p": 0.66864619191494,
+      "p_holm": 0.9221412182398652,
+      "practical": false,
+      "bootstrap_agrees": true,
+      "paired_half_width": 0.5413776082884328,
+      "unpaired_half_width": 173.81627928560152,
+      "oee_points_diff": 0.0007948508345101413,
+      "changeover_share_points_diff": 0.00021796171553437974,
+      "lead_time_h_diff": 0.41719008687158143,
+      "lead_time_h_ci": [
+        -0.011671750882081056,
+        0.8460519246252439
+      ]
+    },
+    {
+      "scenario": "sc03_inspector_plus1",
+      "plain_name": "One more manual inspector",
+      "family": "SC-03",
+      "set": "main",
+      "good_per_ppt_hour_diff": 0.0009715565789216878,
+      "pct_diff": 1.1773297901329498e-07,
+      "pct_ci_low": -1.2305799955237447e-07,
+      "pct_ci_high": 3.585239575789644e-07,
+      "p": 0.3255819880776184,
+      "p_holm": 0.9221412182398652,
+      "practical": false,
+      "bootstrap_agrees": false,
+      "paired_half_width": 0.0019870563144762468,
+      "unpaired_half_width": 173.83468901299517,
+      "oee_points_diff": 6.746920686584445e-06,
+      "changeover_share_points_diff": 2.9466225201502105e-06,
+      "lead_time_h_diff": 0.0,
+      "lead_time_h_ci": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "scenario": "sc03_operator_minus1",
+      "plain_name": "One fewer line operator",
+      "family": "SC-03",
+      "set": "main",
+      "good_per_ppt_hour_diff": -432.29491871955787,
+      "pct_diff": -0.05238538824949503,
+      "pct_ci_low": -0.05612383887921784,
+      "pct_ci_high": -0.04864693761977221,
+      "p": 7.938573799600976e-23,
+      "p_holm": 6.350859039680781e-22,
+      "practical": true,
+      "bootstrap_agrees": true,
+      "paired_half_width": 30.850457830264986,
+      "unpaired_half_width": 166.44810314557245,
+      "oee_points_diff": -3.0020480466635955,
+      "changeover_share_points_diff": -1.4309607690345905,
+      "lead_time_h_diff": 4.1328862608968615,
+      "lead_time_h_ci": [
+        2.3605346794529423,
+        5.905237842340781
+      ]
+    },
+    {
+      "scenario": "sc02_batch_x0p5",
+      "plain_name": "Halve batch size (12 x 50,000 vials)",
+      "family": "SC-02",
+      "set": "main",
+      "good_per_ppt_hour_diff": -1396.4690359405827,
+      "pct_diff": -0.1692237624324308,
+      "pct_ci_low": -0.18289071182912883,
+      "pct_ci_high": -0.15555681303573277,
+      "p": 2.510752528373858e-21,
+      "p_holm": 1.7575267698617008e-20,
+      "practical": true,
+      "bootstrap_agrees": true,
+      "paired_half_width": 112.78245663564098,
+      "unpaired_half_width": 144.36443480445385,
+      "oee_points_diff": -9.697701638476266,
+      "changeover_share_points_diff": 6.551952621502275,
+      "lead_time_h_diff": 27.342114597516275,
+      "lead_time_h_ci": [
+        20.14018315764362,
+        34.54404603738893
+      ]
+    }
+  ],
+  "crn_ci_narrowing_x": {
+    "min": 1.280025627308711,
+    "max": 21.204148502100267,
+    "n_scenarios": 9
+  },
+  "hypothesis_evidence": {
+    "H1b_queue_wait_before_avi_min": {
+      "base": 7.136305849608117,
+      "diff": -2.188166041370173,
+      "ci_low": -3.556489632596361,
+      "ci_high": -0.8198424501439849,
+      "p": 0.0027686429258522156
+    },
+    "H1b_queue_wait_before_manual_inspection_min": {
+      "base": 0.00987401303300739,
+      "diff": 0.06894464082817336,
+      "ci_low": 0.009222864161590467,
+      "ci_high": 0.12866641749475627,
+      "p": 0.02515636291636346
+    },
+    "H2b_sc02_batch_x0p5_mean_cycle_time_h": {
+      "base": 31.855466404261385,
+      "diff": -7.580306433770615,
+      "ci_low": -9.404883680558259,
+      "ci_high": -5.755729186982972,
+      "p": 2.3149861939491553e-09
+    },
+    "H2b_sc02_batch_x0p5_mean_qa_queue_h": {
+      "base": 7.0724687252821345,
+      "diff": 34.486222284824635,
+      "ci_low": 27.103410126235776,
+      "ci_high": 41.86903444341349,
+      "p": 1.840819399345684e-10
+    },
+    "H2b_sc02_batch_x0p5_mean_lead_time_h": {
+      "base": 89.1696803410479,
+      "diff": 27.342114597516275,
+      "ci_low": 20.14018315764362,
+      "ci_high": 34.54404603738893,
+      "p": 1.4582929396829621e-08
+    },
+    "H2b_sc02_batch_x2_mean_cycle_time_h": {
+      "base": 31.855466404261385,
+      "diff": 8.702087433885028,
+      "ci_low": 6.091763713703653,
+      "ci_high": 11.312411154066403,
+      "p": 1.7355258506653184e-07
+    },
+    "H2b_sc02_batch_x2_mean_qa_queue_h": {
+      "base": 7.0724687252821345,
+      "diff": -4.796378663690904,
+      "ci_low": -8.42461307038483,
+      "ci_high": -1.1681442569969778,
+      "p": 0.011348883859399434
+    },
+    "H2b_sc02_batch_x2_mean_lead_time_h": {
+      "base": 89.1696803410479,
+      "diff": 8.471817946720183,
+      "ci_low": 2.9354276385894726,
+      "ci_high": 14.008208254850892,
+      "p": 0.003969245714649759
+    },
+    "H3a_wait_staff_share_by_station_baseline": {
+      "filler": 0.002223219612553075,
+      "avi": 0.04188080340785178,
+      "labeler": 0.0607491685436857,
+      "cartoner": 0.12553098034385937
+    },
+    "H3a_cartoner_wait_staff_share": {
+      "baseline": 0.12553098034385937,
+      "sc03_operator_plus1": 0.061133290658760095,
+      "sc03_operator_minus1": 0.18149120828171494
+    },
+    "H4a_filler_minute_accounting": {
+      "sc04_changeover_m25": {
+        "filler_ppt_saved_min": 434.9869831774995,
+        "filler_changeover_saved_min": 298.1779894933828,
+        "filler_blocked_saved_min": 124.70171509244238,
+        "filler_starved_saved_min": 12.10727859177635,
+        "filler_run_change_min": 1.0231815394945443e-10,
+        "ratio_ppt_saved_to_own_changeover_saved": 1.458816540806922
+      },
+      "sc04_changeover_m50": {
+        "filler_ppt_saved_min": 865.5203329877904,
+        "filler_changeover_saved_min": 596.3559789867656,
+        "filler_blocked_saved_min": 246.94580109958366,
+        "filler_starved_saved_min": 22.218552901352446,
+        "filler_run_change_min": -8.776623872108757e-11,
+        "ratio_ppt_saved_to_own_changeover_saved": 1.451348462135563
+      }
+    },
+    "H5_combo_vs_sc04_m50_good_per_ppt_hour": {
+      "base": 10297.263514210648,
+      "diff": 67.5432948811705,
+      "ci_low": 35.40656666851131,
+      "ci_high": 99.68002309382967,
+      "p": 0.00017691295797155813
+    }
+  },
+  "hypotheses": {
+    "H1a": {
+      "verdict": "supported",
+      "why": "AVI is not the constraint (filler is, all 4 methods) and a second AVI gives +0.2% (95% CI -0.1 to +0.6%), not significant."
+    },
+    "H1b": {
+      "verdict": "mixed",
+      "why": "Queue wait before AVI falls 2.2 min; the queue before manual re-inspection rises 4 s (negligible, but opposite in direction)."
+    },
+    "H2a": {
+      "verdict": "supported",
+      "why": "Larger batches +5.9%, smaller -16.9%; baseline changeover share 27% of PPT, well above the 5% floor."
+    },
+    "H2b": {
+      "verdict": "refuted as stated: not monotonic",
+      "why": "Lead time rises at both levels. Merging batches adds cycle time (+8.7 h); halving batches cuts cycle time (-7.6 h) but QA release queueing grows +34.5 h, so QA release becomes the lead-time constraint."
+    },
+    "H3a": {
+      "verdict": "refuted as registered",
+      "why": "Wait-for-staff at the filler is 0.22% of PPT, yet +1 operator gives +3.5%. The waits sit downstream: cartoner 12.6% of its PPT (6.1% with +1 operator). The pre-registered test measured staff waits at the wrong station."
+    },
+    "H3b": {
+      "verdict": "not testable",
+      "why": "-1 mechanic means zero mechanics (A4)."
+    },
+    "H4a": {
+      "verdict": "monotonic: supported; less than proportional: refuted, mechanism found",
+      "why": "Filler run time is unchanged; its scheduled time falls 866 min at -50%, 1.45x its own changeover saving (596 min), because shorter downstream changeovers also cut the filler's blocked time (247 min). The minute accounting reconciles, so this is not an accounting error."
+    },
+    "H4b": {
+      "verdict": "not examined",
+      "why": "No small-batch x SMED scenario was registered."
+    },
+    "H5": {
+      "verdict": "supported (exploratory)",
+      "why": "AVI is not the constraint and the combination adds only +0.7% over changeover -50% alone (below the 3% practical threshold)."
+    }
+  },
+  "errata": {
+    "E1": "Parallel AVI units let a batch's last sub-lot overtake; fixed, sc01/sc05 re-run",
+    "E2": "Station reject counts logged after the quality transform; fixed, no effect on line metrics or scenario results"
+  }
+}

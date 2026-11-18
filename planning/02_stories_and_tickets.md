@@ -657,15 +657,17 @@ _Story rollup: 8 h_
 - Story: S5.2
 - Description: Two-page memo for a plant manager: the constraint, ranked scenarios with CIs, what to do first, limitations. results_final.json becomes the only source of resume and README numbers.
 - Acceptance criteria:
-  - [ ] At most 2 pages
-  - [ ] Recommendations ranked by effect size with CIs
-  - [ ] Limitations section present
-  - [ ] Every number links to a results file
-  - [ ] results_final.json frozen
+  - [x] At most 2 pages
+  - [x] Recommendations ranked by effect size with CIs
+  - [x] Limitations section present
+  - [x] Every number links to a results file
+  - [x] results_final.json frozen
 - Dependencies: T5.2.1, T5.2.3
 - Estimate: 1.5 h (S)
 - Priority: P0
 - Deliverable/artifact: reports/scenario_findings.md, reports/results_final.json
+
+**Note (2026-11-18):** `reports/scenario_findings.md` is rendered from `reports/results_final.json` by `python -m ffdt.experiments.final`; `tests/unit/test_final.py` fails if the memo and JSON drift apart. About 880 words plus one table (two pages). Hypothesis verdicts: H1a, H2a, H5 supported; H1b mixed; H2b and H3a refuted as registered; H4a partly refuted with the mechanism identified; H3b not testable; H4b not examined.
 
 ---
 
