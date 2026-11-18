@@ -727,6 +727,12 @@ def write() -> dict:
     from ffdt.experiments import economics
 
     economics.write()
+    try:  # needs a headless Chrome or Edge for the PDF; HTML and figures always rebuild
+        from ffdt.experiments import slides
+
+        slides.write()
+    except (RuntimeError, OSError) as e:
+        print(f"slides PDF not printed: {e}")
     return d
 
 

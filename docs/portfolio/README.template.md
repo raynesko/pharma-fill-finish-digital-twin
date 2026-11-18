@@ -37,7 +37,7 @@ Sterile fill-finish lines are capital-intensive and tightly regulated, and the u
 
 {{scenario_table}}
 
-**What to do first:** a SMED changeover-reduction project across the whole line, then one more line operator; keep batches large where the schedule allows. Plant-manager memo with reasoning and limits: [`reports/scenario_findings.md`](reports/scenario_findings.md).
+**What to do first:** a SMED changeover-reduction project across the whole line, then one more line operator; keep batches large where the schedule allows. Plant-manager memo with reasoning and limits: [`reports/scenario_findings.md`](reports/scenario_findings.md). Five-slide summary: [`docs/portfolio/slides.pdf`](docs/portfolio/slides.pdf).
 
 **What the pre-registered hypotheses got wrong:** {{refuted}} were refuted in whole or in part. Example: an extra operator helped although the filler almost never waited for staff, because the waits were at the packaging end (cartoner {{cart_wait}} of its time). Halving batch size lengthened lead time instead of shortening it, because QA release became the queue.
 

@@ -52,5 +52,5 @@ T7.1.1,Task,README,SE7,S7.1,P0,2,M,7,done,T5.2.5;T6.1.2,planning/tickets/se7_doc
 T7.1.2,Task,Model card and ODD-style documentation,SE7,S7.1,P1,1,S,8,done,T4.2.3,planning/tickets/se7_documentation_portfolio/T7.1.2_model_card_and_odd_style.md
 T7.1.3,Task,Release and reproducibility check,SE7,S7.1,P0,1,S,7,todo,T7.1.1;T7.2.2,planning/tickets/se7_documentation_portfolio/T7.1.3_release_and_reproducibility_check.md
 S7.2,Story,Portfolio assets for operations hiring managers,SE7,SE7,,3.5,,,todo,,planning/tickets/se7_documentation_portfolio/S7.2_portfolio_assets_for_operations_hiring.md
-T7.2.1,Task,Figures and 5-slide summary,SE7,S7.2,P1,2,M,8,todo,T5.2.5;T6.2.1,planning/tickets/se7_documentation_portfolio/T7.2.1_figures_and_5_slide_summary.md
+T7.2.1,Task,Figures and 5-slide summary,SE7,S7.2,P1,2,M,8,in_progress,T5.2.5;T6.2.1,planning/tickets/se7_documentation_portfolio/T7.2.1_figures_and_5_slide_summary.md
 T7.2.2,Task,"Resume bullets, pitch and interview Q&A",SE7,S7.2,P0,1.5,S,7,in_progress,T5.2.5;T5.2.1,planning/tickets/se7_documentation_portfolio/T7.2.2_resume_bullets_pitch_and_interview.md

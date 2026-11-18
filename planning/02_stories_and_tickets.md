@@ -908,14 +908,19 @@ _Story rollup: 3.5 h_
 - Story: S7.2
 - Description: Five slides per planning/07_portfolio_packaging.md: context, line and model, validation, scenario results and bottleneck, recommendations and limits.
 - Acceptance criteria:
-  - [ ] Five slides, one message title each
-  - [ ] Figures regenerated from results files
-  - [ ] PDF exported to docs/portfolio/
+  - [x] Five slides, one message title each
+  - [x] Figures regenerated from results files
+  - [x] PDF exported to docs/portfolio/
   - [ ] Deliverable in 2 minutes spoken
 - Dependencies: T5.2.5, T6.2.1
 - Estimate: 2 h (M)
 - Priority: P1
 - Deliverable/artifact: docs/portfolio/slides.pdf (+ source)
+
+**Notes (2026-11-18):**
+- `python -m ffdt.experiments.slides` (also run at the end of `ffdt.experiments.final`) regenerates both slide figures from `results_baseline.json` / `results_final.json`, writes `docs/portfolio/slides.html` (source) and prints `slides.pdf` with headless Chrome or Edge. Every number on a slide is read from the results files; `tests/unit/test_slides.py` fails on drift and checks 5 pages.
+- Speaking script: `docs/portfolio/slides_script.md`, 243 words, about 97 s at 150 wpm (an estimate, not a timing).
+- **Open:** "Deliverable in 2 minutes spoken" needs the owner to run through it aloud with a timer. Ticket stays in_progress until then.
 
 **[T7.2.2] Resume bullets, pitch and interview Q&A**
 - Type: Task

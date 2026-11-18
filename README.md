@@ -49,12 +49,12 @@ Sterile fill-finish lines are capital-intensive and tightly regulated, and the u
 | One fewer line operator | main | -5.2% (-5.6% to -4.9%) | <0.001 | yes |
 | Halve batch size (12 x 50,000 vials) | main | -16.9% (-18.3% to -15.6%) | <0.001 | yes |
 
-**What to do first:** a SMED changeover-reduction project across the whole line, then one more line operator; keep batches large where the schedule allows. Plant-manager memo with reasoning and limits: [`reports/scenario_findings.md`](reports/scenario_findings.md).
+**What to do first:** a SMED changeover-reduction project across the whole line, then one more line operator; keep batches large where the schedule allows. Plant-manager memo with reasoning and limits: [`reports/scenario_findings.md`](reports/scenario_findings.md). Five-slide summary: [`docs/portfolio/slides.pdf`](docs/portfolio/slides.pdf).
 
 **What the pre-registered hypotheses got wrong:** H2b, H3a and H4a were refuted in whole or in part. Example: an extra operator helped although the filler almost never waited for staff, because the waits were at the packaging end (cartoner 13% of its time). Halving batch size lengthened lead time instead of shortening it, because QA release became the queue.
 
 ## Verification and validation
-- **Verification:** 241 automated tests, including vial conservation at every instant, state-time accounting, determinism and common-random-number isolation, and analytical checks against M/M/1, M/M/1/K and availability theory (largest error 1.2%, theory inside every 95% CI). See [`docs/verification.md`](docs/verification.md).
+- **Verification:** 246 automated tests, including vial conservation at every instant, state-time accounting, determinism and common-random-number isolation, and analytical checks against M/M/1, M/M/1/K and availability theory (largest error 1.2%, theory inside every 95% CI). See [`docs/verification.md`](docs/verification.md).
 - **Two model errors were found by these checks during the study and fixed** (parallel-unit batch overtaking, station reject counting); both are documented as dated errata and all runs were repeated.
 - **Sensitivity** ([`reports/sensitivity.md`](reports/sensitivity.md)): 12 parameters moved one at a time to two levels each (mostly ±20%). The filler stays the constraint in every case, and changeover reduction beats a second AVI under every filler and AVI speed change. Filler speed, changeover time and batch size move output most. Sub-lot discretization changes output by at most 0.4%.
 - **Reproducible:** a clean clone running the commands under How to run regenerates `results_final.json` with every number identical (checked 2026-11-18).

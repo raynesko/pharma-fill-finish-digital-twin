@@ -846,7 +846,7 @@
     "estimate_h": 2,
     "size": "M",
     "week": 8,
-    "status": "todo",
+    "status": "in_progress",
     "depends_on": [
       "T5.2.5",
       "T6.2.1"
