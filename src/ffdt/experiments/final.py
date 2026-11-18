@@ -593,8 +593,9 @@ def readme(d: dict, template: str, app_url: str | None = None) -> str:
         f"**Try it:** [what-if app]({app_url}) (simulated, benchmark-parameterized)."
         if app_url
         else "**What-if app:** run `python tasks.py app` locally (see How to run); it lets a "
-        "non-technical user change batch size, staffing, equipment and changeover time and see "
-        "OEE, throughput, losses and queue times with confidence intervals."
+        "non-technical user change batch size, staffing, equipment and changeover time, see OEE, "
+        "throughput, losses and queue times, and compare any option with the baseline (paired "
+        "95% CIs, bottleneck shift)."
     )
     val = {
         "co_share": f"{100 * b['changeover_share']:.0f}%",
@@ -626,7 +627,47 @@ def readme(d: dict, template: str, app_url: str | None = None) -> str:
     return out
 
 
+PRESETS = REPORTS / "app_presets.json"
+PRESET_METRICS = [
+    "good_per_ppt_hour",
+    "line_oee",
+    "changeover_share",
+    "wait_staff_share",
+    "mean_lead_time_h",
+    "makespan_h",
+]
+
+
+def presets() -> dict:
+    """Precomputed scenario comparisons for the app's Compare view (T6.2.1): paired deltas with
+    95% CIs per metric and the bottleneck verdict per configuration (30 replications each)."""
+    comp = pd.read_csv(RESULTS / "comparison.csv")
+    ver = pd.read_csv(RESULTS / "bottleneck_verdicts.csv").set_index("scenario")
+    out = {"label": LABEL, "baseline_bottleneck": ver.loc["baseline", "consensus"], "scenarios": {}}
+    for name, g in comp.groupby("scenario", sort=False):
+        g = g.set_index("metric").loc[PRESET_METRICS]
+        out["scenarios"][name] = {
+            "plain_name": PLAIN[name],
+            "set": g["set"].iloc[0],
+            "n_reps": int(g["n"].iloc[0]),
+            "bottleneck": ver.loc[name, "consensus"],
+            "bottleneck_methods_agreeing_of_4": int(ver.loc[name, "methods_agreeing"]),
+            "metrics": {
+                m: {
+                    "base": float(r.base_mean),
+                    "diff": float(r.mean_diff),
+                    "ci_low": float(r.ci_low),
+                    "ci_high": float(r.ci_high),
+                    "p": float(r.p),
+                }
+                for m, r in g.iterrows()
+            },
+        }
+    return out
+
+
 def write() -> dict:
+    PRESETS.write_text(json.dumps(presets(), indent=2) + "\n", encoding="utf-8")
     d = build()
     (REPORTS / "results_final.json").write_text(json.dumps(d, indent=2) + "\n", encoding="utf-8")
     (REPORTS / "scenario_findings.md").write_text(memo(d), encoding="utf-8")

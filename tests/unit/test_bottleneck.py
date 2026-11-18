@@ -75,3 +75,23 @@ def test_active_period_overlaps_on_both_sides_are_not_double_counted():
     assert sh.loc["B", "sole_share"] == pytest.approx(0)
     assert (sh.loc["A", "sole_share"], sh.loc["A", "shifting_share"]) == pytest.approx((5, 5))
     assert (sh.loc["C", "sole_share"], sh.loc["C", "shifting_share"]) == pytest.approx((20, 12))
+
+
+def test_run_level_methods_agree_with_full_evidence_on_baseline_tables():
+    """The app's fast run-level methods pick the same station as the full analysis."""
+    base = Path(__file__).resolve().parents[2] / "results" / "baseline"
+    if not (base / "baseline.stations.parquet").exists():
+        pytest.skip("scenario results not generated (python tasks.py scenarios)")
+    st = pd.read_parquet(base / "baseline.stations.parquet")
+    q = pd.read_parquet(base / "baseline.queues.parquet")
+    v = B.run_level_verdict(B.run_level_picks(st, q))
+    assert v["consensus"] == "filler" and v["methods_agreeing"] == 3
+
+
+def test_run_level_picks_on_synthetic_line():
+    cfg = _three_station((300, 120, 300))
+    from ffdt.experiments import runner
+
+    res = runner.run(cfg, n_reps=2, seed=3)
+    v = B.run_level_verdict(B.run_level_picks(res.stations, res.queues))
+    assert v["consensus"] == "capper"

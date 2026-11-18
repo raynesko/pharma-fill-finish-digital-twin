@@ -175,6 +175,43 @@ def replication(cfg: LineConfig, seed: int, rep: int, **line_kw) -> pd.DataFrame
     ).assign(replication=rep)
 
 
+RUN_LEVEL = ["utilization", "arrow", "queue"]
+
+
+def run_level_picks(stations: pd.DataFrame, queues: pd.DataFrame) -> pd.DataFrame:
+    """Per replication, the station picked by the three run-level methods (utilization, arrows,
+    queue), from the runner's per-replication tables. Fast enough for the app; the active-period
+    method needs full state timelines and is left to ``evidence``."""
+    rows = []
+    for rep, g in stations.groupby("replication"):
+        g = g[g["station"] != "manual_inspection"].set_index("station")
+        ppt = g["ppt_min"]
+        util = g["RUN_min"] / ppt
+        chosen, _ = arrow_method(g["STARVED_min"] / ppt, g["BLOCKED_min"] / ppt)
+        q = queues[queues["replication"] == rep].set_index("buffer")["mean_sublots"]
+        qin = pd.Series({s: q.get(f"in:{s}", np.nan) for s in g.index[1:]})
+        rows.append(
+            {
+                "replication": rep,
+                "utilization": util.idxmax(),
+                "arrow": chosen,
+                "queue": qin.idxmax(),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def run_level_verdict(pk: pd.DataFrame) -> dict:
+    out = {}
+    for m in RUN_LEVEL:
+        vc = pk[m].value_counts(normalize=True)
+        out[m], out[f"{m}_share"] = vc.index[0], float(vc.iloc[0])
+    top = pd.Series([out[m] for m in RUN_LEVEL]).value_counts()
+    out["consensus"] = top.index[0] if top.iloc[0] >= 2 else "none"
+    out["methods_agreeing"] = int(top.iloc[0])
+    return out
+
+
 def picks(ev: pd.DataFrame) -> pd.DataFrame:
     """Per replication: the station each method picks."""
     rows = []

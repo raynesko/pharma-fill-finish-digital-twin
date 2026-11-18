@@ -30,6 +30,12 @@ st.caption(
 )
 
 with st.sidebar:
+    view = st.radio(
+        "View",
+        ["Explore one run", "Compare with baseline"],
+        help="Compare: pre-registered scenarios (30 replications, precomputed) or your own levers "
+        "against the baseline with the same random numbers.",
+    )
     st.header("Levers")
     with st.form("levers"):
         batch = st.number_input(
@@ -79,6 +85,122 @@ try:
     cfg = api.build_config(levers)
 except api.InvalidInput as e:
     st.error(str(e))
+    st.stop()
+
+
+def show_comparison(table, shift: dict, n_reps: int, source: str) -> None:
+    """Delta table with CIs, a no-detectable-difference warning, and the bottleneck shift."""
+    st.caption(f"{source} · {n_reps} replications per side · {viz.SIM_TAG}")
+    t = table.set_index("metric")
+    g = t.loc["good_per_ppt_hour"]
+    c1, c2, c3 = st.columns(3)
+    c1.metric(
+        "Good vials per scheduled hour",
+        f"{g.scenario:,.0f}",
+        f"{g.difference:+,.0f} ({g.difference / g.baseline:+.1%}) vs baseline",
+        delta_color="normal" if g.detectable else "off",  # grey when not detectable
+        help=api.TOOLTIPS["good_per_ppt_hour"],
+    )
+    c1.caption(f"95% CI of the difference {g.ci_low:+,.0f} to {g.ci_high:+,.0f}")
+    o = t.loc["line_oee"]
+    c2.metric(
+        "Line OEE",
+        f"{o.scenario:.1f}%",
+        f"{o.difference:+.1f} points",
+        delta_color="normal" if o.detectable else "off",
+    )
+    c2.caption(f"95% CI {o.ci_low:+.1f} to {o.ci_high:+.1f} points")
+    moved = shift["shifted"]
+    c3.metric(
+        "Bottleneck",
+        shift["scenario"],
+        help="Station picked by most bottleneck methods (" + shift["methods"] + ").",
+    )
+    c3.caption(f"moved from {shift['baseline']}" if moved else "same as baseline (no shift)")
+    flat = table.loc[~table["detectable"], "label"].tolist()
+    if flat:
+        st.warning(
+            "No detectable difference (the 95% CI includes zero) for: " + ", ".join(flat) + "."
+        )
+    if moved:
+        st.warning(
+            f"The bottleneck shifts from **{shift['baseline']}** to **{shift['scenario']}**."
+        )
+    else:
+        st.info(f"The bottleneck stays at the **{shift['scenario']}**.")
+    show = table.assign(
+        **{
+            "95% CI of difference": table.apply(
+                lambda r: f"{r.ci_low:+,.2f} to {r.ci_high:+,.2f}", axis=1
+            ),
+            "Detectable?": table["detectable"].map({True: "yes", False: "no (CI includes 0)"}),
+        }
+    )[
+        [
+            "label",
+            "unit",
+            "baseline",
+            "scenario",
+            "difference",
+            "95% CI of difference",
+            "Detectable?",
+        ]
+    ].rename(
+        columns={
+            "label": "Metric",
+            "unit": "Unit",
+            "baseline": "Baseline",
+            "scenario": "Scenario",
+            "difference": "Difference",
+        }
+    )
+    st.dataframe(show.round(2), hide_index=True, use_container_width=True)
+    st.caption(
+        "Scenario minus baseline, paired by replication (common random numbers): replication r "
+        "of both sides sees the same breakdowns and defects, so the difference isolates the "
+        "change. Shares are of the filler's scheduled production time."
+    )
+
+
+if view == "Compare with baseline":
+    st.subheader("Compare with baseline " + viz.SIM_LABEL)
+    presets = api.load_presets()
+    names = {v["plain_name"]: k for k, v in presets["scenarios"].items()}
+    custom = "Custom: the levers in the sidebar"
+    pick = st.selectbox("Scenario", [*names, custom])
+    if pick != custom:
+        p = presets["scenarios"][names[pick]]
+        shift = {
+            "baseline": presets["baseline_bottleneck"],
+            "scenario": p["bottleneck"],
+            "shifted": p["bottleneck"] != presets["baseline_bottleneck"],
+            "methods": "4 methods: utilization, active period, blocking/starvation arrows, queue",
+        }
+        label = "pre-registered, exploratory" if p["set"] == "exploratory" else "pre-registered"
+        show_comparison(api.preset_table(p), shift, p["n_reps"], f"Precomputed {label} scenario")
+        st.stop()
+    if submitted:
+        t0 = time.perf_counter()
+        with st.spinner("Simulating baseline and your scenario with the same random numbers..."):
+            bcfg = api.build_config(base)
+            b_out = run_cached(bcfg.model_dump_json(), bcfg.hash(), quick)
+            s_out = run_cached(cfg.model_dump_json(), cfg.hash(), quick)
+            st.session_state["compare"] = api.compare(b_out, s_out) + (s_out.n_reps,)
+        st.session_state["elapsed"] = time.perf_counter() - t0
+    res = st.session_state.get("compare")
+    if res is None:
+        st.info(
+            "Set the levers in the sidebar and press **Run** to compare them with the baseline."
+        )
+        st.stop()
+    table, shift, n = res
+    show_comparison(
+        table,
+        shift,
+        n,
+        f"Custom run · bottleneck by 3 run-level methods · "
+        f"{st.session_state.get('elapsed', 0):.1f} s",
+    )
     st.stop()
 
 if submitted:

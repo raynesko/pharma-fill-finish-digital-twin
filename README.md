@@ -7,7 +7,7 @@
 
 ![Scenario effects on good vials per scheduled-production hour, paired 95% CIs (simulated, benchmark-parameterized)](reports/figures/06_scenario_forest.png)
 
-**What-if app:** run `python tasks.py app` locally (see How to run); it lets a non-technical user change batch size, staffing, equipment and changeover time and see OEE, throughput, losses and queue times with confidence intervals.
+**What-if app:** run `python tasks.py app` locally (see How to run); it lets a non-technical user change batch size, staffing, equipment and changeover time, see OEE, throughput, losses and queue times, and compare any option with the baseline (paired 95% CIs, bottleneck shift).
 
 <details><summary>App screenshot (baseline in quick mode, 10 replications, so its numbers differ slightly from the 30-replication results above)</summary>
 
@@ -54,7 +54,7 @@ Sterile fill-finish lines are capital-intensive and tightly regulated, and the u
 **What the pre-registered hypotheses got wrong:** H2b, H3a and H4a were refuted in whole or in part. Example: an extra operator helped although the filler almost never waited for staff, because the waits were at the packaging end (cartoner 13% of its time). Halving batch size lengthened lead time instead of shortening it, because QA release became the queue.
 
 ## Verification and validation
-- **Verification:** 217 automated tests, including vial conservation at every instant, state-time accounting, determinism and common-random-number isolation, and analytical checks against M/M/1, M/M/1/K and availability theory (largest error 1.2%, theory inside every 95% CI). See [`docs/verification.md`](docs/verification.md).
+- **Verification:** 222 automated tests, including vial conservation at every instant, state-time accounting, determinism and common-random-number isolation, and analytical checks against M/M/1, M/M/1/K and availability theory (largest error 1.2%, theory inside every 95% CI). See [`docs/verification.md`](docs/verification.md).
 - **Two model errors were found by these checks during the study and fixed** (parallel-unit batch overtaking, station reject counting); both are documented as dated errata and all runs were repeated.
 - **Reproducible:** a clean clone running the commands under How to run regenerates `results_final.json` with every number identical (checked 2026-11-18).
 - **Validation** is face validity only: no plant data was available. A practitioner review is planned.

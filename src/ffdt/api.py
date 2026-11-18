@@ -10,6 +10,7 @@ Levers are the user-facing knobs; every other parameter stays at the baseline co
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -17,13 +18,24 @@ import pandas as pd
 from pydantic import ValidationError
 
 from ffdt.config import LineConfig, apply_overrides, load_config
-from ffdt.experiments import reps, runner
+from ffdt.experiments import bottleneck as bn
+from ffdt.experiments import reps, runner, stats
 from ffdt.metrics import ledger
 from ffdt.sim.line import Line
 
 ROOT = Path(__file__).resolve().parents[2]
 BASELINE = ROOT / "configs" / "baseline_line.yaml"
 QUICK_REPS = 10
+PRESETS = ROOT / "reports" / "app_presets.json"
+# metrics in the Compare view: key -> (label, display scale, unit after scaling)
+COMPARE_METRICS = {
+    "good_per_ppt_hour": ("Good vials per scheduled hour", 1.0, "vials/h"),
+    "line_oee": ("Line OEE", 100.0, "points"),
+    "changeover_share": ("Changeover share of scheduled time", 100.0, "points"),
+    "wait_staff_share": ("Waiting-for-staff share of scheduled time", 100.0, "points"),
+    "mean_lead_time_h": ("Mean batch lead time incl. QA", 1.0, "h"),
+    "makespan_h": ("Campaign length", 1.0, "h"),
+}
 KPI_LABELS = {
     "good_per_ppt_hour": "Good vials per scheduled hour",
     "line_oee": "Line OEE",
@@ -177,6 +189,9 @@ class Output:
     queues: pd.DataFrame  # mean per buffer across replications
     timeline: pd.DataFrame  # replication 0, first shift, after the calendar overlay
     bottleneck: dict
+    stations_reps: pd.DataFrame | None = None  # one row per replication x station
+    queues_reps: pd.DataFrame | None = None  # one row per replication x buffer
+    pareto_reps: pd.DataFrame | None = None  # one row per replication x loss category
 
 
 def kpi_table(summary: pd.DataFrame) -> pd.DataFrame:
@@ -238,6 +253,9 @@ def simulate(cfg: LineConfig, quick: bool = True, n_reps: int | None = None) -> 
         queues=queues,
         timeline=sample_shift(cfg, exp["seed"]),
         bottleneck={"station": b["station"], "utilization": float(b["utilization"])},
+        stations_reps=res.stations,
+        queues_reps=res.queues,
+        pareto_reps=res.pareto,
     )
 
 
@@ -271,3 +289,75 @@ def _coalesce(st: pd.DataFrame) -> pd.DataFrame:
     out = pd.DataFrame(rows, columns=["station", "unit", "state", "start", "end"])
     out["minutes"] = out["end"] - out["start"]
     return out
+
+
+# -- Compare view (T6.2.1) ----------------------------------------------------------------------
+def load_presets() -> dict:
+    """Precomputed pre-registered scenarios vs baseline (30 replications, common random numbers),
+    written by ``python -m ffdt.experiments.final``."""
+    return json.loads(PRESETS.read_text(encoding="utf-8"))
+
+
+def preset_table(preset: dict) -> pd.DataFrame:
+    return _delta_rows({m: preset["metrics"][m] for m in COMPARE_METRICS if m in preset["metrics"]})
+
+
+def _per_rep(out: Output) -> pd.DataFrame:
+    """Replication-indexed metrics, including loss shares from the per-replication Pareto."""
+    s = out.summary.set_index("replication").sort_index()
+    if out.pareto_reps is not None:
+        sh = out.pareto_reps.pivot_table(
+            index="replication", columns="category", values="share_of_ppt"
+        )
+        s["changeover_share"] = sh.get("CHANGEOVER")
+        s["wait_staff_share"] = sh.get("WAIT_STAFF")
+    return s
+
+
+def _delta_rows(d: dict) -> pd.DataFrame:
+    rows = []
+    for m, r in d.items():
+        label, scale, unit = COMPARE_METRICS[m]
+        rows.append(
+            {
+                "metric": m,
+                "label": label,
+                "baseline": r["base"] * scale,
+                "scenario": (r["base"] + r["diff"]) * scale,
+                "difference": r["diff"] * scale,
+                "ci_low": r["ci_low"] * scale,
+                "ci_high": r["ci_high"] * scale,
+                "unit": unit,
+                "detectable": not (r["ci_low"] <= 0 <= r["ci_high"]),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def compare(base: Output, scen: Output) -> tuple[pd.DataFrame, dict]:
+    """Paired comparison of two runs made with the same seed and replication count (common
+    random numbers): scenario minus baseline per metric with a t-based 95% CI, and the
+    bottleneck by the three run-level methods for each run."""
+    if base.n_reps != scen.n_reps or base.seed != scen.seed:
+        raise InvalidInput("Both runs need the same seed and number of replications.")
+    a, b = _per_rep(base), _per_rep(scen)
+    d = {}
+    for m in COMPARE_METRICS:
+        if m in a and m in b:
+            r = stats.paired(a[m].to_numpy(), b[m].to_numpy(), n_boot=200)
+            d[m] = {
+                "base": r.base_mean,
+                "diff": r.mean_diff,
+                "ci_low": r.ci_low,
+                "ci_high": r.ci_high,
+            }
+    vb = bn.run_level_verdict(bn.run_level_picks(base.stations_reps, base.queues_reps))
+    vs = bn.run_level_verdict(bn.run_level_picks(scen.stations_reps, scen.queues_reps))
+    shift = {
+        "baseline": vb["consensus"],
+        "scenario": vs["consensus"],
+        "shifted": vb["consensus"] != vs["consensus"],
+        "methods": "utilization, blocking/starvation arrows, queue (run-level)",
+        "agreeing_scenario": vs["methods_agreeing"],
+    }
+    return _delta_rows(d), shift

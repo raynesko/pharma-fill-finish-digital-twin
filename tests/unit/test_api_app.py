@@ -128,3 +128,67 @@ def test_kpi_csv_has_units_and_opens_as_excel_csv():
     assert "Unit" in df.columns and df["Unit"].notna().all()
     assert any("NOT PLANT DATA" in c for c in df.columns)
     assert len(df) == len(api.KPI_LABELS)
+
+
+# -- Compare view (T6.2.1) ------------------------------------------------------------------
+def test_presets_load_fast_and_cover_every_scenario():
+    import time
+
+    t0 = time.perf_counter()
+    p = api.load_presets()
+    tables = {k: api.preset_table(v) for k, v in p["scenarios"].items()}
+    assert time.perf_counter() - t0 < 2.0  # target in T6.2.1
+    assert len(tables) == 11 and p["baseline_bottleneck"] == "filler"
+    t = tables["sc01_avi_plus1"].set_index("metric")
+    assert not t.loc["good_per_ppt_hour", "detectable"]  # second AVI: CI includes zero
+    assert tables["sc04_changeover_m50"].set_index("metric").loc["good_per_ppt_hour", "detectable"]
+
+
+@pytest.fixture(scope="module")
+def small_runs():
+    base = api.simulate(api.baseline(), n_reps=3)
+    smed = api.simulate(api.build_config(api.Levers(changeover_scale=0.5)), n_reps=3)
+    return base, smed
+
+
+def test_custom_compare_uses_common_random_numbers(small_runs):
+    base, smed = small_runs
+    same, shift = api.compare(base, base)
+    assert (same["difference"] == 0).all() and not same["detectable"].any()
+    assert not shift["shifted"] and shift["baseline"] == "filler"
+    t, shift = api.compare(base, smed)
+    g = t.set_index("metric").loc["good_per_ppt_hour"]
+    assert g.detectable and g.difference > 0 and g.ci_low > 0
+    assert not shift["shifted"]
+
+
+def test_compare_rejects_unpaired_runs(small_runs):
+    base, _ = small_runs
+    other = api.simulate(api.baseline(), n_reps=2)
+    with pytest.raises(api.InvalidInput):
+        api.compare(base, other)
+
+
+def test_app_compare_view_shows_preset_with_warning_and_bottleneck():
+    from streamlit.testing.v1 import AppTest
+
+    at = AppTest.from_file(str(APP), default_timeout=60).run()
+    at.radio[0].set_value("Compare with baseline").run()
+    at.selectbox[0].set_value("Add a second AVI machine").run()
+    assert not at.exception
+    assert any("No detectable difference" in w.value for w in at.warning)
+    assert any("stays at the **filler**" in i.value for i in at.info)
+    assert at.dataframe
+
+
+@pytest.mark.slow
+def test_app_compare_view_custom_run():
+    from streamlit.testing.v1 import AppTest
+
+    at = AppTest.from_file(str(APP), default_timeout=300).run()
+    at.radio[0].set_value("Compare with baseline").run()
+    at.selectbox[0].set_value("Custom: the levers in the sidebar").run()
+    at.button[0].click().run()  # levers at baseline: identical to the baseline
+    assert not at.exception
+    assert any("No detectable difference" in w.value for w in at.warning)
+    assert any("stays at the **filler**" in i.value for i in at.info)

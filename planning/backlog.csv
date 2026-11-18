@@ -43,7 +43,7 @@ S6.1,Story,Run the simulation from a browser,SE6,SE6,,5,,,todo,,planning/tickets
 T6.1.1,Task,Streamlit app skeleton,SE6,S6.1,P0,2,M,6,done,T2.1.4;T3.2.6,planning/tickets/se6_interface/T6.1.1_streamlit_app_skeleton.md
 T6.1.2,Task,Results dashboard,SE6,S6.1,P0,3,M,7,done,T6.1.1,planning/tickets/se6_interface/T6.1.2_results_dashboard.md
 S6.2,Story,Compare scenarios and share the app,SE6,SE6,,6,,,todo,,planning/tickets/se6_interface/S6.2_compare_scenarios_and_share_the.md
-T6.2.1,Task,Scenario comparison view,SE6,S6.2,P0,2,M,7,todo,T6.1.2;T5.1.2,planning/tickets/se6_interface/T6.2.1_scenario_comparison_view.md
+T6.2.1,Task,Scenario comparison view,SE6,S6.2,P0,2,M,7,done,T6.1.2;T5.1.2,planning/tickets/se6_interface/T6.2.1_scenario_comparison_view.md
 T6.2.2,Task,Non-technical usability polish,SE6,S6.2,P1,1,S,8,todo,T6.2.1,planning/tickets/se6_interface/T6.2.2_non_technical_usability_polish.md
 T6.2.3,Task,Deploy and usability test,SE6,S6.2,P1,2,M,8,todo,T6.2.2,planning/tickets/se6_interface/T6.2.3_deploy_and_usability_test.md
 T6.2.4,Task,Export KPI table and charts,SE6,S6.2,P2,1,S,8,done,T6.1.2,planning/tickets/se6_interface/T6.2.4_export_kpi_table_and_charts.md
