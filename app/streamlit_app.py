@@ -14,13 +14,28 @@ st.set_page_config(page_title="Fill-Finish Line What-If", layout="wide")
 
 
 @st.cache_data(show_spinner=False, max_entries=32)
-def run_cached(config_json: str, config_hash: str, quick: bool) -> api.Output:
-    """Cached by config content (hash) and mode: identical inputs return instantly."""
+def run_cached(config_json: str, config_hash: str, n_reps: int) -> api.Output:
+    """Cached by config content (hash) and replication count: identical inputs return instantly."""
     cfg = api.LineConfig.model_validate_json(config_json)
-    return api.simulate(cfg, quick=quick)
+    return api.simulate(cfg, n_reps=n_reps)
 
 
 base = api.baseline_levers()
+presets = api.load_presets()
+# one preset button per required lever: inspection capacity, batch size, staffing, changeover
+PRESET_BUTTONS = {
+    "Second inspection machine": "sc01_avi_plus1",
+    "Halve batch size": "sc02_batch_x0p5",
+    "One more line operator": "sc03_operator_plus1",
+    "Changeovers 50% shorter": "sc04_changeover_m50",
+}
+COMPARE = "Compare with baseline"
+
+
+def open_preset(scenario_id: str) -> None:
+    st.session_state["view"] = COMPARE
+    st.session_state["preset"] = presets["scenarios"][scenario_id]["plain_name"]
+
 
 st.title("Fill-finish line what-if")
 st.caption(
@@ -29,10 +44,46 @@ st.caption(
     "(see docs/assumptions.md)."
 )
 
+st.markdown("**Try a pre-registered scenario** (precomputed, 30 replications, opens instantly):")
+for col, (label, sid) in zip(st.columns(4), PRESET_BUTTONS.items(), strict=True):
+    col.button(
+        label,
+        key=f"preset_{sid}",
+        on_click=open_preset,
+        args=(sid,),
+        use_container_width=True,
+        help=presets["scenarios"][sid]["plain_name"],
+    )
+
+with st.expander("How to read this page"):
+    st.markdown(
+        """
+- **What this is.** A computer model of a sterile vial filling and packaging line, run many
+  times with random breakdowns, defects and repair times. Every number is **simulated** from
+  public benchmarks and judgment, **not plant data**.
+- **The question it answers.** If we change one thing (batch size, staff, an extra
+  inspection machine, faster changeovers), how many more good vials per scheduled hour do we
+  get, and which machine then limits the line (the **bottleneck**)?
+- **Ranges, not single numbers.** Each result is an average over several runs. The "95% CI"
+  under a number is the range the true average plausibly lies in. More replications give a
+  narrower range.
+- **Compare view.** Shows *scenario minus baseline*. If the range of the difference includes
+  zero, the change is greyed and flagged **no detectable difference**: do not act on it.
+- **Practical significance.** The study decided in advance that a change matters if it adds
+  at least **3% good vials per scheduled hour** or **2 OEE points** (TARGET, pre-registered).
+- **Start here.** Press a scenario button above, or set the levers in the sidebar and
+  press **Run**.
+"""
+    )
+
+with st.expander("Glossary: how every number is defined"):
+    st.markdown(api.glossary_md())
+
 with st.sidebar:
     view = st.radio(
         "View",
-        ["Explore one run", "Compare with baseline"],
+        ["Explore one run", COMPARE],
+        key="view",
         help="Compare: pre-registered scenarios (30 replications, precomputed) or your own levers "
         "against the baseline with the same random numbers.",
     )
@@ -63,10 +114,15 @@ with st.sidebar:
         )
         mtbf = st.slider("Time between breakdowns (x baseline)", 0.1, 10.0, 1.0, 0.1)
         mttr = st.slider("Repair time (x baseline)", 0.1, 10.0, 1.0, 0.1)
-        quick = st.toggle(
-            f"Quick mode ({api.QUICK_REPS} replications)",
-            value=True,
-            help="Off: the full experiment design (30 replications, narrower confidence intervals).",
+        reps_req = st.slider(
+            "Replications",
+            3,
+            api.MAX_REPS,
+            api.QUICK_REPS,
+            help=f"How many times the week is simulated. {api.QUICK_REPS} takes seconds; "
+            f"{api.MAX_REPS} matches the study design and gives narrower ranges. The maximum "
+            f"is {api.MAX_REPS}: the range narrows only with the square root of the count, so "
+            "more replications cost run time without changing conclusions.",
         )
         submitted = st.form_submit_button("Run", type="primary", use_container_width=True)
 
@@ -86,6 +142,16 @@ try:
 except api.InvalidInput as e:
     st.error(str(e))
     st.stop()
+
+# runaway-run guardrail: big batches x many replications would run for many minutes
+n_reps = min(int(reps_req), api.max_reps(cfg))
+if n_reps < reps_req:
+    st.sidebar.warning(
+        f"Replications limited to {n_reps} for this batch size. A run may simulate at most "
+        f"{api.MAX_VIAL_REPS / 1e6:.0f} million vials in total (replications x vials in the "
+        "6-batch campaign), the size of the full baseline study, so it finishes in reasonable "
+        "time."
+    )
 
 
 def show_comparison(table, shift: dict, n_reps: int, source: str) -> None:
@@ -162,12 +228,11 @@ def show_comparison(table, shift: dict, n_reps: int, source: str) -> None:
     )
 
 
-if view == "Compare with baseline":
+if view == COMPARE:
     st.subheader("Compare with baseline " + viz.SIM_LABEL)
-    presets = api.load_presets()
     names = {v["plain_name"]: k for k, v in presets["scenarios"].items()}
     custom = "Custom: the levers in the sidebar"
-    pick = st.selectbox("Scenario", [*names, custom])
+    pick = st.selectbox("Scenario", [*names, custom], key="preset")
     if pick != custom:
         p = presets["scenarios"][names[pick]]
         shift = {
@@ -183,8 +248,9 @@ if view == "Compare with baseline":
         t0 = time.perf_counter()
         with st.spinner("Simulating baseline and your scenario with the same random numbers..."):
             bcfg = api.build_config(base)
-            b_out = run_cached(bcfg.model_dump_json(), bcfg.hash(), quick)
-            s_out = run_cached(cfg.model_dump_json(), cfg.hash(), quick)
+            n_pair = min(n_reps, api.max_reps(bcfg))  # both sides need the same count
+            b_out = run_cached(bcfg.model_dump_json(), bcfg.hash(), n_pair)
+            s_out = run_cached(cfg.model_dump_json(), cfg.hash(), n_pair)
             st.session_state["compare"] = api.compare(b_out, s_out) + (s_out.n_reps,)
         st.session_state["elapsed"] = time.perf_counter() - t0
     res = st.session_state.get("compare")
@@ -206,7 +272,7 @@ if view == "Compare with baseline":
 if submitted:
     t0 = time.perf_counter()
     with st.spinner("Simulating..."):
-        st.session_state["result"] = run_cached(cfg.model_dump_json(), cfg.hash(), quick)
+        st.session_state["result"] = run_cached(cfg.model_dump_json(), cfg.hash(), n_reps)
     st.session_state["elapsed"] = time.perf_counter() - t0
 
 out = st.session_state.get("result")

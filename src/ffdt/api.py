@@ -26,6 +26,11 @@ from ffdt.sim.line import Line
 ROOT = Path(__file__).resolve().parents[2]
 BASELINE = ROOT / "configs" / "baseline_line.yaml"
 QUICK_REPS = 10
+MAX_REPS = 30  # the pre-registered experiment design; more adds run time, not new answers
+# runaway-run guardrail: replications x campaign vials may not exceed the full baseline
+# experiment (30 replications x 6 batches x 100,000 vials)
+MAX_VIAL_REPS = 18_000_000
+GLOSSARY = ROOT / "docs" / "domain" / "glossary.md"
 PRESETS = ROOT / "reports" / "app_presets.json"
 # metrics in the Compare view: key -> (label, display scale, unit after scaling)
 COMPARE_METRICS = {
@@ -292,6 +297,17 @@ def _coalesce(st: pd.DataFrame) -> pd.DataFrame:
 
 
 # -- Compare view (T6.2.1) ----------------------------------------------------------------------
+def max_reps(cfg: LineConfig) -> int:
+    """Most replications allowed for this configuration by the runaway-run guardrail."""
+    vials = sum(b.size_vials for b in cfg.schedule)
+    return max(1, min(MAX_REPS, MAX_VIAL_REPS // vials))
+
+
+def glossary_md() -> str:
+    """The binding glossary (docs/domain/glossary.md) without its title line."""
+    return GLOSSARY.read_text(encoding="utf-8").partition("\n")[2].strip()
+
+
 def load_presets() -> dict:
     """Precomputed pre-registered scenarios vs baseline (30 replications, common random numbers),
     written by ``python -m ffdt.experiments.final``."""

@@ -1,4 +1,5 @@
 import ast
+import dataclasses
 from pathlib import Path
 
 import pytest
@@ -80,7 +81,7 @@ def test_app_run_and_cache():
     from streamlit.testing.v1 import AppTest
 
     at = AppTest.from_file(str(APP), default_timeout=120).run()
-    at.button[0].click().run()
+    _run_button(at).click().run()
     assert not at.exception
     assert at.metric and at.session_state["elapsed"] < 30  # quick mode target
     assert len(at.get("plotly_chart")) == 3  # pareto, timeline, queues
@@ -88,7 +89,7 @@ def test_app_run_and_cache():
         "NOT PLANT DATA" in c.value.upper() or "simulated" in c.value.lower()
         for c in at.caption[:2]
     )
-    at.button[0].click().run()
+    _run_button(at).click().run()
     assert at.session_state["elapsed"] < 1  # second identical run from cache
     assert at.get("download_button")  # CSV export present
 
@@ -188,7 +189,66 @@ def test_app_compare_view_custom_run():
     at = AppTest.from_file(str(APP), default_timeout=300).run()
     at.radio[0].set_value("Compare with baseline").run()
     at.selectbox[0].set_value("Custom: the levers in the sidebar").run()
-    at.button[0].click().run()  # levers at baseline: identical to the baseline
+    _run_button(at).click().run()  # levers at baseline: identical to the baseline
     assert not at.exception
     assert any("No detectable difference" in w.value for w in at.warning)
     assert any("stays at the **filler**" in i.value for i in at.info)
+
+
+def _run_button(at):
+    return next(b for b in at.button if b.label == "Run")
+
+
+def test_four_preset_buttons_open_their_scenarios_in_compare_view():
+    from streamlit.testing.v1 import AppTest
+
+    at = AppTest.from_file(str(APP), default_timeout=60).run()
+    presets = [b for b in at.button if b.key and b.key.startswith("preset_")]
+    assert len(presets) == 4
+    plain = api.load_presets()["scenarios"]
+    for b in presets:
+        sid = b.key.removeprefix("preset_")
+        b.click().run()
+        assert not at.exception
+        assert at.radio[0].value == "Compare with baseline"
+        assert at.selectbox[0].value == plain[sid]["plain_name"]
+        assert at.dataframe
+    # one per required lever: inspection capacity, batch size, staffing, changeover
+    assert {k.split("_")[0] for k in (b.key.removeprefix("preset_") for b in presets)} == {
+        "sc01",
+        "sc02",
+        "sc03",
+        "sc04",
+    }
+
+
+def test_help_panels_present_and_glossary_is_the_binding_one():
+    from streamlit.testing.v1 import AppTest
+
+    at = AppTest.from_file(str(APP), default_timeout=60).run()
+    labels = [e.label for e in at.expander]
+    assert "How to read this page" in labels
+    assert any(lbl.startswith("Glossary") for lbl in labels)
+    md = " ".join(m.value for m in at.markdown)
+    assert "Planned production time (PPT)" in md and "Line OEE" in md
+    assert api.glossary_md() in md
+
+
+def test_replication_guardrail():
+    small = api.build_config(api.baseline_levers())
+    assert api.max_reps(small) == api.MAX_REPS
+    big = api.build_config(dataclasses.replace(api.baseline_levers(), batch_size_vials=1_000_000))
+    assert api.max_reps(big) == 3  # 18 M vial-replications / 6 M campaign vials
+    assert api.max_reps(big) * sum(b.size_vials for b in big.schedule) <= api.MAX_VIAL_REPS
+
+
+def test_app_caps_replications_for_huge_batches():
+    from streamlit.testing.v1 import AppTest
+
+    at = AppTest.from_file(str(APP), default_timeout=60).run()
+    at.radio[0].set_value("Compare with baseline").run()  # a preset is shown: Run won't simulate
+    at.number_input[0].set_value(1_000_000)
+    next(s for s in at.slider if s.label == "Replications").set_value(30)
+    _run_button(at).click().run()
+    assert not at.exception
+    assert any("Replications limited to 3" in w.value for w in at.sidebar.warning)

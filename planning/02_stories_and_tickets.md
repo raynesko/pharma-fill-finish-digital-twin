@@ -765,14 +765,20 @@ _Story rollup: 6 h_
 - Story: S6.2
 - Description: Preset buttons for the four required scenarios, glossary expander, how-to-read panel, runaway-run guardrail.
 - Acceptance criteria:
-  - [ ] Four preset scenario buttons
-  - [ ] Glossary expander with the glossary definitions
-  - [ ] How to read this panel present
-  - [ ] Maximum replications guardrail with explanation
+  - [x] Four preset scenario buttons
+  - [x] Glossary expander with the glossary definitions
+  - [x] How to read this panel present
+  - [x] Maximum replications guardrail with explanation
 - Dependencies: T6.2.1
 - Estimate: 1 h (S)
 - Priority: P1
 - Deliverable/artifact: app UI text, help panel
+
+**Notes (2026-11-18):**
+- Four buttons, one per required lever (sc01 second AVI, sc02 halve batch, sc03 one more line operator, sc04 changeover -50%), open the precomputed comparison in the Compare view.
+- The glossary expander renders `docs/domain/glossary.md` itself, so app and docs cannot drift.
+- Guardrail: replications slider 3..30 (30 = the pre-registered design), plus a workload cap of 18 M simulated vials per run (replications x campaign vials, the size of the full baseline study). A 1,000,000-vial batch is capped at 3 replications with a sidebar warning. The quick-mode toggle was replaced by the slider (default 10 = the former quick mode).
+- Tests: `tests/unit/test_api_app.py` (preset buttons, help panels, guardrail).
 
 **[T6.2.3] Deploy and usability test**
 - Type: Task

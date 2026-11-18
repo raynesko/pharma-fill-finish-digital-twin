@@ -2,7 +2,7 @@
   "label": "Simulated, benchmark-parameterized. Not plant data.",
   "number_type": "RESULT",
   "frozen": "2026-11-18",
-  "git_sha_at_build": "32ac5a09e9e1+dirty",
+  "git_sha_at_build": "bf3fd2bf9067+dirty",
   "sources": {
     "baseline": "reports/results_baseline.json",
     "scenarios": "results/<scenario>/*.parquet (python tasks.py scenarios)",
@@ -319,7 +319,7 @@
     "rule": "scenarios whose mean effect is at least 0.1% of baseline output"
   },
   "verification": {
-    "automated_tests": 233,
+    "automated_tests": 237,
     "analytic_checks": [
       {
         "name": "M/M/1 mean queue wait Wq (rho=0.5), min",

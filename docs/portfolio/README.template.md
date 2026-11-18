@@ -9,7 +9,7 @@
 
 {{app_line}}
 
-<details><summary>App screenshot (baseline in quick mode, 10 replications, so its numbers differ slightly from the 30-replication results above)</summary>
+<details><summary>App screenshot (baseline at the default 10 replications, so its numbers differ slightly from the 30-replication results above)</summary>
 
 ![What-if app: levers on the left; KPIs with confidence intervals, loss Pareto, sample-shift state timeline and queue times on the right](reports/figures/app_screenshot.png)
 
