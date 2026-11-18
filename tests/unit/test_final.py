@@ -38,3 +38,10 @@ def test_scenario_rows_are_consistent(d):
 
 def test_every_preregistered_hypothesis_has_a_verdict(d):
     assert set(d["hypotheses"]) == {"H1a", "H1b", "H2a", "H2b", "H3a", "H3b", "H4a", "H4b", "H5"}
+
+
+def test_portfolio_is_rendered_from_the_frozen_json(d):
+    text = (ROOT / "docs" / "portfolio" / "resume_bullets.md").read_text(encoding="utf-8")
+    assert final.portfolio(d) == text
+    bullets = [ln for ln in text.splitlines() if ln[:2] in ("1.", "2.", "3.")]
+    assert len(bullets) == 3 and all("simulated" in b.lower() for b in bullets)

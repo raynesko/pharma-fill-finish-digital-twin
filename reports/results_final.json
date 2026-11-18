@@ -2,7 +2,7 @@
   "label": "Simulated, benchmark-parameterized. Not plant data.",
   "number_type": "RESULT",
   "frozen": "2026-11-18",
-  "git_sha_at_build": "2356d03de371+dirty",
+  "git_sha_at_build": "264d4375b33e+dirty",
   "sources": {
     "baseline": "reports/results_baseline.json",
     "scenarios": "results/<scenario>/*.parquet (python tasks.py scenarios)",
@@ -41,6 +41,7 @@
   "bottleneck": {
     "constraint": "filler",
     "methods_agreeing_of_4": 4,
+    "constraint_utilization": 0.5745713157467051,
     "constraint_sole_share": 0.6193386857135107,
     "secondary": "cartoner",
     "secondary_reps": 30,
@@ -304,8 +305,58 @@
   ],
   "crn_ci_narrowing_x": {
     "min": 1.280025627308711,
-    "max": 21.204148502100267,
-    "n_scenarios": 9
+    "max": 7.14088953328174,
+    "scenarios": [
+      "sc05_combo_co50_avi2",
+      "sc04_changeover_m50",
+      "sc04_changeover_m25",
+      "sc02_batch_x2",
+      "sc03_operator_plus1",
+      "sc01_avi_plus1",
+      "sc03_operator_minus1",
+      "sc02_batch_x0p5"
+    ],
+    "rule": "scenarios whose mean effect is at least 0.1% of baseline output"
+  },
+  "verification": {
+    "automated_tests": 214,
+    "analytic_checks": [
+      {
+        "name": "M/M/1 mean queue wait Wq (rho=0.5), min",
+        "theory": 0.9995000000000002,
+        "simulated": 0.9925754547535,
+        "ci": [
+          0.9796215366308703,
+          1.0055293728761296
+        ],
+        "rel_error": -0.006928009251125775,
+        "theory_in_ci": true
+      },
+      {
+        "name": "M/M/1/K blocking probability (rho=0.8, K=5)",
+        "theory": 0.08881949865556424,
+        "simulated": 0.08776666666666669,
+        "ci": [
+          0.08641722537468263,
+          0.08911610795865074
+        ],
+        "rel_error": -0.01185361328124987,
+        "theory_in_ci": true
+      },
+      {
+        "name": "Availability MTBF/(MTBF+MTTR) (240/20)",
+        "theory": 0.9230769230769231,
+        "simulated": 0.922646343169019,
+        "ci": [
+          0.9214287321846444,
+          0.9238639541533935
+        ],
+        "rel_error": -0.000466461566896198,
+        "theory_in_ci": true
+      }
+    ],
+    "max_abs_rel_error": 0.01185361328124987,
+    "all_theory_in_ci": true
   },
   "hypothesis_evidence": {
     "H1b_queue_wait_before_avi_min": {
