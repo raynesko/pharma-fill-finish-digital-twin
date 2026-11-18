@@ -801,6 +801,8 @@ _Story rollup: 6 h_
 - Priority: P1
 - Deliverable/artifact: docs/usability_test.md, README link
 
+**Notes (2026-11-18):** protocol, script, success criteria and blank log in `docs/usability_test.md` (not yet run). Deploy needs the public GitHub repo from T7.1.3: on share.streamlit.io, New app, main file `app/streamlit_app.py`, Python 3.12. The app reads `reports/app_presets.json` and `docs/domain/glossary.md` from the repo, both committed. Then put the URL into README (`readme(..., app_url=...)`) and the `[app link]` placeholder in `docs/portfolio/resume_bullets.md`.
+
 **[T6.2.4] Export KPI table and charts**
 - Type: Task
 - Sub-epic: SE6 - Interface: Streamlit What-If App
@@ -882,6 +884,14 @@ _Story rollup: 4 h_
 - Estimate: 1 h (S)
 - Priority: P0
 - Deliverable/artifact: git tag v1.0.0, Makefile target all
+
+**Notes (2026-11-18), prepared locally; nothing pushed:**
+- `python tasks.py all` (= `make all`) now runs lint, tests and the full results pipeline (`tasks.py results`: scenarios, baseline report, paired stats, bottleneck, sensitivity, final documents) from an empty `results/` folder. `ffdt.experiments.baseline_report` gained a CLI so the notebook is not needed for the numbers.
+- LICENSE (MIT) already present. Owner may want their name in place of "ffdt contributors".
+- Publish-safety scan of tracked files: no secrets, tokens, emails or user paths (one harmless mention of the `H:` drive in planning/08). **Commit author emails are the owner's personal Gmail**; pushing publishes them. Options: push as-is, or set a GitHub noreply address and rewrite authors before the first push (owner's call).
+- Draft repo description: "Discrete-event simulation (SimPy) of a sterile vial fill-finish line: OEE, bottleneck analysis, pre-registered scenarios with common random numbers, Streamlit what-if app. Simulated, benchmark-parameterized."
+- Draft topics: discrete-event-simulation, simpy, oee, operations-research, pharmaceutical-manufacturing, theory-of-constraints, smed, streamlit, industrial-engineering, process-improvement.
+- Remaining owner steps: create the GitHub repo, push, `git tag v1.0.0 && git push --tags`, set description and topics.
 
 ---
 
