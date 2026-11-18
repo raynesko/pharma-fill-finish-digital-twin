@@ -9,9 +9,9 @@
 
 **What-if app:** run `python tasks.py app` locally (see How to run); it lets a non-technical user change batch size, staffing, equipment and changeover time, see OEE, throughput, losses and queue times, and compare any option with the baseline (paired 95% CIs, bottleneck shift).
 
-<details><summary>App screenshot (baseline at the default 10 replications, so its numbers differ slightly from the 30-replication results above)</summary>
+<details><summary>App screenshot (Compare view: one click on a pre-registered scenario, changeovers 50% shorter vs baseline, 30 replications)</summary>
 
-![What-if app: levers on the left; KPIs with confidence intervals, loss Pareto, sample-shift state timeline and queue times on the right](reports/figures/app_screenshot.png)
+![What-if app, Compare view: four scenario buttons, how-to-read and glossary panels; changeovers 50% shorter vs baseline with paired confidence intervals, a no-detectable-difference warning and the bottleneck verdict; levers for custom runs on the left](reports/figures/app_screenshot.png)
 
 </details>
 
