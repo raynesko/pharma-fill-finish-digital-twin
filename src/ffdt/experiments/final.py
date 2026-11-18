@@ -724,6 +724,9 @@ def write() -> dict:
     PORTFOLIO.parent.mkdir(parents=True, exist_ok=True)
     PORTFOLIO.write_text(portfolio(d), encoding="utf-8")
     README.write_text(readme(d, README_TEMPLATE.read_text(encoding="utf-8")), encoding="utf-8")
+    from ffdt.experiments import economics
+
+    economics.write()
     return d
 
 

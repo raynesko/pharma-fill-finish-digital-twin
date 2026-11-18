@@ -54,7 +54,7 @@ Sterile fill-finish lines are capital-intensive and tightly regulated, and the u
 **What the pre-registered hypotheses got wrong:** H2b, H3a and H4a were refuted in whole or in part. Example: an extra operator helped although the filler almost never waited for staff, because the waits were at the packaging end (cartoner 13% of its time). Halving batch size lengthened lead time instead of shortening it, because QA release became the queue.
 
 ## Verification and validation
-- **Verification:** 237 automated tests, including vial conservation at every instant, state-time accounting, determinism and common-random-number isolation, and analytical checks against M/M/1, M/M/1/K and availability theory (largest error 1.2%, theory inside every 95% CI). See [`docs/verification.md`](docs/verification.md).
+- **Verification:** 241 automated tests, including vial conservation at every instant, state-time accounting, determinism and common-random-number isolation, and analytical checks against M/M/1, M/M/1/K and availability theory (largest error 1.2%, theory inside every 95% CI). See [`docs/verification.md`](docs/verification.md).
 - **Two model errors were found by these checks during the study and fixed** (parallel-unit batch overtaking, station reject counting); both are documented as dated errata and all runs were repeated.
 - **Sensitivity** ([`reports/sensitivity.md`](reports/sensitivity.md)): 12 parameters moved one at a time to two levels each (mostly ±20%). The filler stays the constraint in every case, and changeover reduction beats a second AVI under every filler and AVI speed change. Filler speed, changeover time and batch size move output most. Sub-lot discretization changes output by at most 0.4%.
 - **Reproducible:** a clean clone running the commands under How to run regenerates `results_final.json` with every number identical (checked 2026-11-18).
@@ -89,7 +89,7 @@ Full register: [`docs/assumptions.md`](docs/assumptions.md).
 ## Limitations and what real data would add
 - Benchmark parameters, not a real line: speeds, failure and repair times, changeover times and reject rates come from public sources and judgment. With historian or MES data I would fit time-to-failure and time-to-repair distributions per station, calibrate to measured OEE and check a holdout week.
 - One line, one weekly product mix (6 batches, 2 products, 2 vial formats); a different mix could move the constraint.
-- No costs, so options are ranked by output, not by return on investment.
+- No costs in the model, so options are ranked by output, not by return on investment. [`docs/economics.md`](docs/economics.md) shows an illustrative payback with placeholder prices: changeover reduction pays back at any of them, a second inspection machine at none.
 - Decision support only; a tool used for GxP decisions would need computerized-system validation.
 
 ## Repository map

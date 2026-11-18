@@ -41,7 +41,7 @@ Decision-support exploration for a sterile liquid-vial fill-finish line: find wh
 3. **Simplified equipment:** no reduced-speed losses, no start-up scrap after changeovers, filler and stopperer modeled as one station, tunnel as a fixed-residence delay with backpressure.
 4. **Staff:** no absenteeism, skills or travel time; one shared pool per role.
 5. **Out of scope:** lyophilization, sterility-test holds, media fills, environmental-monitoring excursions, deviations and CAPA, material shortages.
-6. **No costs:** options are ranked by output, not by return on investment.
+6. **No costs:** options are ranked by output, not by return on investment; [`economics.md`](economics.md) is an illustrative payback with placeholder prices only.
 7. **Changeover-reduction levels are assumptions** from a published case study, not measured SMED results.
 8. **Local sensitivity only:** one-at-a-time ±20% does not explore interactions between parameters.
 

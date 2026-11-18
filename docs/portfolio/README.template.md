@@ -77,7 +77,7 @@ Full register: [`docs/assumptions.md`](docs/assumptions.md).
 ## Limitations and what real data would add
 - Benchmark parameters, not a real line: speeds, failure and repair times, changeover times and reject rates come from public sources and judgment. With historian or MES data I would fit time-to-failure and time-to-repair distributions per station, calibrate to measured OEE and check a holdout week.
 - One line, one weekly product mix (6 batches, 2 products, 2 vial formats); a different mix could move the constraint.
-- No costs, so options are ranked by output, not by return on investment.
+- No costs in the model, so options are ranked by output, not by return on investment. [`docs/economics.md`](docs/economics.md) shows an illustrative payback with placeholder prices: changeover reduction pays back at any of them, a second inspection machine at none.
 - Decision support only; a tool used for GxP decisions would need computerized-system validation.
 
 ## Repository map
