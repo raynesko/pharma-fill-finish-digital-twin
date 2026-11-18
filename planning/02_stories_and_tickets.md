@@ -625,15 +625,17 @@ _Story rollup: 8 h_
 - Story: S5.2
 - Description: Apply at least three methods: utilization, active-period method (Roser et al.), and blocking/starvation signature, with queue build-up as a fourth corroboration. Report whether the constraint shifts under each scenario.
 - Acceptance criteria:
-  - [ ] Method x station table for baseline
-  - [ ] Disagreement between methods is explained, not hidden
-  - [ ] Per scenario: does the bottleneck shift (yes/no, to where)
-  - [ ] Test on a synthetic 3-machine line with a known bottleneck
-  - [ ] Caveat stated: with random failures the constraint is dynamic
+  - [x] Method x station table for baseline
+  - [x] Disagreement between methods is explained, not hidden
+  - [x] Per scenario: does the bottleneck shift (yes/no, to where)
+  - [x] Test on a synthetic 3-machine line with a known bottleneck
+  - [x] Caveat stated: with random failures the constraint is dynamic
 - Dependencies: T4.2.3, T5.1.2
 - Estimate: 1.5 h (S)
 - Priority: P0
 - Deliverable/artifact: src/ffdt/experiments/bottleneck.py, tests/unit/test_bottleneck.py
+
+**Note (2026-11-18):** report `reports/bottleneck.md` (generated). Method references (Roser et al. active period; Kuo, Lim & Meerkov arrow method) are marked VERIFY in the module docstring until the papers are read. The synthetic test uses a real 3-station sub-line (filler, capper, AVI) with a deliberately slow station.
 
 **[T5.2.4] Illustrative economics**
 - Type: Task

@@ -36,7 +36,7 @@ T5.1.2,Task,Run scenarios with common random numbers,SE5,S5.1,P0,1.5,S,6,done,T5
 S5.2,Story,Analyze results and name the bottleneck,SE5,SE5,,8.0,,,todo,,planning/tickets/se5_scenario_study/S5.2_analyze_results_and_name_the.md
 T5.2.1,Task,Paired statistical comparison,SE5,S5.2,P0,2,M,6,done,T5.1.2,planning/tickets/se5_scenario_study/T5.2.1_paired_statistical_comparison.md
 T5.2.2,Task,Sensitivity analysis,SE5,S5.2,P1,2,M,8,todo,T4.2.1;T3.2.6,planning/tickets/se5_scenario_study/T5.2.2_sensitivity_analysis.md
-T5.2.3,Task,Bottleneck identification,SE5,S5.2,P0,1.5,S,6,todo,T4.2.3;T5.1.2,planning/tickets/se5_scenario_study/T5.2.3_bottleneck_identification.md
+T5.2.3,Task,Bottleneck identification,SE5,S5.2,P0,1.5,S,6,done,T4.2.3;T5.1.2,planning/tickets/se5_scenario_study/T5.2.3_bottleneck_identification.md
 T5.2.4,Task,Illustrative economics,SE5,S5.2,P2,1,S,8,todo,T5.2.1,planning/tickets/se5_scenario_study/T5.2.4_illustrative_economics.md
 T5.2.5,Task,Findings memo,SE5,S5.2,P0,1.5,S,6,todo,T5.2.1;T5.2.3,planning/tickets/se5_scenario_study/T5.2.5_findings_memo.md
 S6.1,Story,Run the simulation from a browser,SE6,SE6,,5,,,todo,,planning/tickets/se6_interface/S6.1_run_the_simulation_from_a.md

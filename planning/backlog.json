@@ -592,7 +592,7 @@
     "estimate_h": 1.5,
     "size": "S",
     "week": 6,
-    "status": "todo",
+    "status": "done",
     "depends_on": [
       "T4.2.3",
       "T5.1.2"

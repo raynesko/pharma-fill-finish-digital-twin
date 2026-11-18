@@ -24,6 +24,7 @@ Ask the builder these at kickoff. None blocks work; the default is used until an
 - How tunnel stoppage is handled in practice (vials in tunnel on stop).
 - Whether serialization stops are better modeled as minor stoppages or as a separate loss.
 - Exact current clause numbers and wording in EU GMP Annex 1 (2022) for interventions; cite section numbers only after reading them.
+- Bottleneck-method references (T5.2.3): the active-period / shifting-bottleneck method (Roser, Nakano & Tanaka) and the blocking/starvation arrow method (Kuo, Lim & Meerkov). Confirm titles, years and venues from the papers before citing them in the README or slides.
 
 ## Project risks
 See charter section 9. Review at the weekly ritual (planning/03).
