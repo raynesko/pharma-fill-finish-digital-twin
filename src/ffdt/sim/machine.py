@@ -96,10 +96,11 @@ class Machine:
             if self.before_item:  # e.g. catch-up changeover on a parallel unit
                 yield from self.before_item(self, item)
             yield from self.work(item.vials / self.rate_vpm)
+            vials_in = item.vials  # before the transform: quality transforms mutate in place (E2)
             out = self.transform(self, item) if self.transform else item
             vials_out = out.vials if out is not None else 0
             self.log.outputs.append(
-                (self.name, self.unit, self.env.now, item.batch_id, item.vials, vials_out)
+                (self.name, self.unit, self.env.now, item.batch_id, vials_in, vials_out)
             )
             if out is not None and out.vials > 0:
                 self.rec.set(State.BLOCKED)

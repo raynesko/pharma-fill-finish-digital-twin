@@ -29,7 +29,7 @@ T4.1.3,Task,"Run length, warm-up and replication count",SE4,S4.1,P0,1.5,S,5,done
 S4.2,Story,Freeze a baseline and test face validity,SE4,SE4,,4.5,,,todo,,planning/tickets/se4_verification_validation/S4.2_freeze_a_baseline_and_test.md
 T4.2.1,Task,Freeze baseline v1.0,SE4,S4.2,P0,0.5,S,5,done,T4.1.1;T4.1.2;T4.1.3,planning/tickets/se4_verification_validation/T4.2.1_freeze_baseline_v1_0.md
 T4.2.2,Task,Face validation with a practitioner,SE4,S4.2,P1,2,M,8,todo,T4.2.1,planning/tickets/se4_verification_validation/T4.2.2_face_validation_with_a_practitioner.md
-T4.2.3,Task,Baseline results report,SE4,S4.2,P0,2,M,5,todo,T4.2.1,planning/tickets/se4_verification_validation/T4.2.3_baseline_results_report.md
+T4.2.3,Task,Baseline results report,SE4,S4.2,P0,2,M,5,done,T4.2.1,planning/tickets/se4_verification_validation/T4.2.3_baseline_results_report.md
 S5.1,Story,Design and execute the scenario experiments,SE5,SE5,,2.5,,,todo,,planning/tickets/se5_scenario_study/S5.1_design_and_execute_the_scenario.md
 T5.1.1,Task,Pre-registered scenario matrix,SE5,S5.1,P0,1,S,6,done,T1.1.3;T4.2.1,planning/tickets/se5_scenario_study/T5.1.1_pre_registered_scenario_matrix.md
 T5.1.2,Task,Run scenarios with common random numbers,SE5,S5.1,P0,1.5,S,6,done,T5.1.1;T3.2.3;T3.2.4,planning/tickets/se5_scenario_study/T5.1.2_run_scenarios_with_common_random.md

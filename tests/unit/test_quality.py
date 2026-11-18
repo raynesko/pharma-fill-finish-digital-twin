@@ -79,3 +79,18 @@ def test_manual_inspection_pool_runs_and_returns_rework(cfg):
 def test_same_seed_same_quality_outcome(cfg):
     a, b = _run(cfg, seed=21), _run(cfg, seed=21)
     assert a.quality.ledger == b.quality.ledger
+
+
+def test_station_rejects_reconcile_with_quality_ledger(cfg):
+    """Erratum E2: station 'processed' is counted before the quality transform, so the filler
+    and AVI show their rejects as Q < 1 and the counts match the quality ledger."""
+    from ffdt.metrics.oee import station_table
+
+    line = _run(cfg)
+    q = line.quality.ledger
+    st = station_table(line.export()).set_index("station")
+    lost = st["processed"] - st["good"]
+    assert lost["filler"] == q.scrapped["fill_weight"] > 0
+    assert lost["avi"] == q.avi_true_rejects + q.avi_false_rejects > 0
+    assert st.loc["filler", "Q"] < 1 and st.loc["avi", "Q"] < 1
+    assert (lost.drop(["filler", "avi", "manual_inspection"]) == 0).all()

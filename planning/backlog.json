@@ -480,7 +480,7 @@
     "estimate_h": 2,
     "size": "M",
     "week": 5,
-    "status": "todo",
+    "status": "done",
     "depends_on": [
       "T4.2.1"
     ],

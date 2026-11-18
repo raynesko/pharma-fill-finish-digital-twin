@@ -46,3 +46,5 @@ The main set has 10 comparisons; the exploratory set has 1.
 - **What changed:** model code only. No hypothesis, level, metric, decision rule, seed or replication count was changed.
 - **Affected scenarios:** only those with more than one unit at a station: `sc01_avi_plus1` and `sc05_combo_co50_avi2`. All 12 configurations were re-run; baseline and the other 9 scenarios are bit-identical to the first run, which confirms the fix is confined to parallel units.
 - **Disclosure:** the corrected sc01 result was produced after the pre-fix sc01 result had been seen. The fix was chosen because the pre-fix behaviour was physically wrong (a batch split across a changeover), not because of the direction of the result. The superseded run is kept locally in `results/_superseded_E1/` (results are not committed).
+
+**E2 (2026-11-18, metrics erratum, no effect on scenario results).** Per-station reject counts were logged after the quality transform (details in `docs/baseline_definition.md` changelog). All configurations were re-run; the replication summaries and loss Pareto used by every pre-registered comparison are bit-identical, so no scenario result changed.
