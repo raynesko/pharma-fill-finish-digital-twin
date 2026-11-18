@@ -825,15 +825,17 @@ _Story rollup: 4 h_
 - Story: S7.1
 - Description: Write the README per planning/05_repo_structure.md outline. All numbers are read from results_final.json by a script, not typed by hand.
 - Acceptance criteria:
-  - [ ] Sections: summary, problem, method, results, how to run, assumptions, limitations
-  - [ ] Three-sentence plain-language summary at the top
-  - [ ] Every number marked simulated / benchmark-parameterized
-  - [ ] How-to-run verified in a clean clone
-  - [ ] Hero figure plus app link or screenshot
+  - [x] Sections: summary, problem, method, results, how to run, assumptions, limitations
+  - [x] Three-sentence plain-language summary at the top
+  - [x] Every number marked simulated / benchmark-parameterized
+  - [x] How-to-run verified in a clean clone
+  - [x] Hero figure plus app link or screenshot
 - Dependencies: T5.2.5, T6.1.2
 - Estimate: 2 h (M)
 - Priority: P0
 - Deliverable/artifact: README.md
+
+**Note (2026-11-18):** README is rendered from `docs/portfolio/README.template.md` + `reports/results_final.json` (`python -m ffdt.experiments.final`; drift is caught by `tests/unit/test_final.py`). Clean clone verified: install + 212 tests pass, and the full pipeline regenerates `results_final.json` identically except the build-stamp SHA. App screenshot taken from a local run (quick mode); app link to be added at deploy (T6.2.3).
 
 **[T7.1.2] Model card and ODD-style documentation**
 - Type: Task
