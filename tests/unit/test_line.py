@@ -74,3 +74,19 @@ def test_parallel_units_share_buffers(cfg):
     line = Line(two, use_calendar=False, stochastic=False, changeovers=False, quality=False)
     assert line.run()
     assert {u for st, u, *_ in line.log.states if st == "avi"} == {0, 1}
+
+
+def test_parallel_units_do_not_cause_spurious_downstream_changeovers(cfg):
+    """Erratum E1: with two AVI units the last sub-lot of a batch must not overtake an earlier
+    one, or the labeler changes over to the next batch and back again."""
+    two = apply_overrides(cfg, {"station_overrides": {"avi": {"count": 2}}})
+    for rep in range(4):
+        line = Line(two, root_seed=20261116, replication=rep)
+        assert line.run()
+        seen = {}
+        for _t, kind, st, d in line.log.events:
+            if kind != "changeover" or st not in ("labeler", "cartoner"):
+                continue
+            assert d[2] > seen.get(st, -1), f"{st} changed back to batch {d[2]} (rep {rep})"
+            seen[st] = d[2]
+        assert seen == {"labeler": 5, "cartoner": 5}  # one changeover into each later batch

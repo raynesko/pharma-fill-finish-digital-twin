@@ -45,3 +45,4 @@ At the tag, all fast tests (161) and slow analytical checks (3) pass. The checks
 | Version | Date | Change |
 |---|---|---|
 | 1.0 | 2026-11-17 | First frozen baseline. Any parameter change after this needs version 1.1 and a row here. |
+| 1.0 (model fix E1) | 2026-11-17 | No parameter or config change; config hash still `2f9b035c9964`. Model fix for parallel units of one station (`UnitGroup` in `src/ffdt/sim/machine.py`, erratum E1 in `docs/scenario_matrix.md`). It only acts when a station has more than one unit, so the baseline (one AVI unit) is unaffected: all 30 baseline replications were re-run and are bit-identical to the pre-fix run. |

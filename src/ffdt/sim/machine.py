@@ -22,6 +22,33 @@ Transform = Callable[["Machine", SubLot], SubLot | None]
 AfterBatch = Callable[["Machine", SubLot], Generator]
 
 
+class UnitGroup:
+    """Parallel identical units of one station (e.g. SC-01's two AVI machines).
+
+    A unit holding the *last* sub-lot of a batch releases it downstream only after its siblings
+    have released every other sub-lot of that batch. Without this, the last sub-lot can overtake
+    an earlier one, the next station changes over to the next batch and then has to change back
+    for the straggler (found in T5.2.1, erratum E1). This mirrors line clearance: the batch is
+    complete downstream only when all of it has left the parallel station."""
+
+    def __init__(self, env: simpy.Environment):
+        self.env, self.units = env, []
+        self.changed = env.event()
+
+    def notify(self) -> None:
+        ev, self.changed = self.changed, self.env.event()
+        ev.succeed()
+
+    def others_hold(self, me: Machine, batch_id: int) -> bool:
+        return any(
+            u is not me
+            and u.holding is not None
+            and u.holding.batch_id == batch_id
+            and not u.holding.rework
+            for u in self.units
+        )
+
+
 class Machine:
     def __init__(
         self,
@@ -38,6 +65,7 @@ class Machine:
         after_batch: AfterBatch | None = None,
         repair_crew: simpy.PriorityResource | None = None,
         before_item: AfterBatch | None = None,
+        group: UnitGroup | None = None,
     ):
         if rate_vpm <= 0:
             raise ValueError("rate_vpm must be > 0")
@@ -50,6 +78,9 @@ class Machine:
         self.after_batch = after_batch
         self.repair_crew = repair_crew
         self.before_item = before_item
+        self.group = group
+        if group is not None:
+            group.units.append(self)
         self.setup: tuple[str, str] | None = None  # (product, format) the unit is set up for
         self.rec = StateRecorder(env, log, name, unit)
         self.holding: SubLot | None = None  # sub-lot inside the machine (for WIP accounting)
@@ -73,8 +104,13 @@ class Machine:
             if out is not None and out.vials > 0:
                 self.rec.set(State.BLOCKED)
                 self.holding = out
+                if out.last_in_batch and self.group is not None:
+                    while self.group.others_hold(self, out.batch_id):
+                        yield self.group.changed  # siblings still have this batch's vials
                 yield self.outbuf.put(out)
             self.holding = None
+            if self.group is not None:
+                self.group.notify()
             self.last_batch = item
             if item.last_in_batch and self.after_batch:
                 yield from self.after_batch(self, item)

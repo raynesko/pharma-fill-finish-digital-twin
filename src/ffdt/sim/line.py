@@ -18,7 +18,7 @@ from ffdt.config import LineConfig, Station
 from ffdt.sim.batches import ChangeoverPolicy
 from ffdt.sim.core import Calendar, MonitoredStore, SimLog, SubLot
 from ffdt.sim.failures import RunClocks
-from ffdt.sim.machine import Machine
+from ffdt.sim.machine import Machine, UnitGroup
 from ffdt.sim.qa_release import QARelease
 from ffdt.sim.quality import QualityModel
 from ffdt.sim.staffing import Crews
@@ -145,8 +145,9 @@ class Line:
             if st.kind == "tunnel":
                 self.tunnels.append(Tunnel(self, st, inbuf, outbuf))
             else:
+                group = UnitGroup(env) if st.count > 1 else None
                 for u in range(st.count):
-                    self.make_machine(st, u, inbuf, outbuf)
+                    self.make_machine(st, u, inbuf, outbuf, group=group)
         if self.quality:
             self.quality.reject_store = self.reject_store
             insp = next(i for i, s in enumerate(cfg.stations) if s.kind == "inspection")
@@ -173,7 +174,7 @@ class Line:
         env.process(self._sink())
 
     # -- construction helpers ----------------------------------------------------------------
-    def make_machine(self, st: Station, unit, inbuf, outbuf, transform=None) -> Machine:
+    def make_machine(self, st: Station, unit, inbuf, outbuf, transform=None, group=None) -> Machine:
         clocks = None
         if self.stochastic and (st.failures or st.minor_stops):
             clocks = RunClocks(
@@ -211,6 +212,7 @@ class Line:
             after_batch=policy.after_batch if policy else None,
             before_item=policy.before_item if policy else None,
             repair_crew=self.crews.mechanic if self.crews else None,
+            group=group,
         )
         self.machines.append(m)
         return m
