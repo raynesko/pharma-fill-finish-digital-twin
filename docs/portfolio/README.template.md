@@ -44,6 +44,7 @@ Sterile fill-finish lines are capital-intensive and tightly regulated, and the u
 ## Verification and validation
 - **Verification:** {{n_tests}} automated tests, including vial conservation at every instant, state-time accounting, determinism and common-random-number isolation, and analytical checks against M/M/1, M/M/1/K and availability theory (largest error {{max_err}}, theory inside every 95% CI). See [`docs/verification.md`](docs/verification.md).
 - **Two model errors were found by these checks during the study and fixed** (parallel-unit batch overtaking, station reject counting); both are documented as dated errata and all runs were repeated.
+{{sens_line}}
 - **Reproducible:** a clean clone running the commands under How to run regenerates `results_final.json` with every number identical (checked 2026-11-18).
 - **Validation** is face validity only: no plant data was available. A practitioner review is planned.
 

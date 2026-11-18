@@ -610,14 +610,16 @@ _Story rollup: 8 h_
 - Story: S5.2
 - Description: One-at-a-time +/-20% perturbation of every Sens=Y assumption in docs/assumptions.md (12 parameters: sub-lot N, minor-stop frequency, buffer capacity, filler rate, AVI rate, MTBF, MTTR, changeover duration, batch size, false-reject rate, defect incidence, QA review) on line OEE and good vials/hour; flag any parameter that flips the bottleneck or reorders scenarios.
 - Acceptance criteria:
-  - [ ] Tornado chart for OEE and for throughput
-  - [ ] Sub-lot size N included to expose discretization error
-  - [ ] Written statement of which conclusions survive and which do not
-  - [ ] Parameters that flip the bottleneck are listed
+  - [x] Tornado chart for OEE and for throughput
+  - [x] Sub-lot size N included to expose discretization error
+  - [x] Written statement of which conclusions survive and which do not
+  - [x] Parameters that flip the bottleneck are listed
 - Dependencies: T4.2.1, T3.2.6
 - Estimate: 2 h (M)
 - Priority: P1
 - Deliverable/artifact: src/ffdt/experiments/sensitivity.py, reports/sensitivity.md, figure tornado.png
+
+**Note (2026-11-18):** `python -m ffdt.experiments.sensitivity` (about 13 min, 16 cores) writes `results/sensitivity.json` and renders `reports/sensitivity.md` and `reports/figures/tornado_{throughput,oee}.png`. Deviation: sub-lot N levels are 10 and 200, not 500, because ADR-001 needs the 2,000-vial buffers to hold 10 sub-lots. No parameter flips the bottleneck. Scenario order was re-checked for the two decisive scenarios under filler and AVI speed ±20% (not all 11 scenarios x 24 perturbations); the conclusion held in every case. Summary added to `results_final.json` as the `sensitivity` block (additive; no existing number changed).
 
 **[T5.2.3] Bottleneck identification**
 - Type: Task
@@ -845,13 +847,15 @@ _Story rollup: 4 h_
 - Story: S7.1
 - Description: Purpose, intended and non-intended use, structure, V&V summary, limitations, version.
 - Acceptance criteria:
-  - [ ] States intended use as decision-support exploration, not plant release or GxP use
-  - [ ] Links to assumptions, verification and baseline definition
-  - [ ] Limitations section lists at least 5 items
+  - [x] States intended use as decision-support exploration, not plant release or GxP use
+  - [x] Links to assumptions, verification and baseline definition
+  - [x] Limitations section lists at least 5 items
 - Dependencies: T4.2.3
 - Estimate: 1 h (S)
 - Priority: P1
 - Deliverable/artifact: docs/model_card.md
+
+**Note (2026-11-18):** `docs/model_card.md`, ODD-style sections; 8 limitations; links to assumptions, verification, baseline definition, glossary, metrics schema and pre-registration.
 
 **[T7.1.3] Release and reproducibility check**
 - Type: Task

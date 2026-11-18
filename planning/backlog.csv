@@ -35,7 +35,7 @@ T5.1.1,Task,Pre-registered scenario matrix,SE5,S5.1,P0,1,S,6,done,T1.1.3;T4.2.1,
 T5.1.2,Task,Run scenarios with common random numbers,SE5,S5.1,P0,1.5,S,6,done,T5.1.1;T3.2.3;T3.2.4,planning/tickets/se5_scenario_study/T5.1.2_run_scenarios_with_common_random.md
 S5.2,Story,Analyze results and name the bottleneck,SE5,SE5,,8.0,,,todo,,planning/tickets/se5_scenario_study/S5.2_analyze_results_and_name_the.md
 T5.2.1,Task,Paired statistical comparison,SE5,S5.2,P0,2,M,6,done,T5.1.2,planning/tickets/se5_scenario_study/T5.2.1_paired_statistical_comparison.md
-T5.2.2,Task,Sensitivity analysis,SE5,S5.2,P1,2,M,8,todo,T4.2.1;T3.2.6,planning/tickets/se5_scenario_study/T5.2.2_sensitivity_analysis.md
+T5.2.2,Task,Sensitivity analysis,SE5,S5.2,P1,2,M,8,done,T4.2.1;T3.2.6,planning/tickets/se5_scenario_study/T5.2.2_sensitivity_analysis.md
 T5.2.3,Task,Bottleneck identification,SE5,S5.2,P0,1.5,S,6,done,T4.2.3;T5.1.2,planning/tickets/se5_scenario_study/T5.2.3_bottleneck_identification.md
 T5.2.4,Task,Illustrative economics,SE5,S5.2,P2,1,S,8,todo,T5.2.1,planning/tickets/se5_scenario_study/T5.2.4_illustrative_economics.md
 T5.2.5,Task,Findings memo,SE5,S5.2,P0,1.5,S,6,done,T5.2.1;T5.2.3,planning/tickets/se5_scenario_study/T5.2.5_findings_memo.md
@@ -49,7 +49,7 @@ T6.2.3,Task,Deploy and usability test,SE6,S6.2,P1,2,M,8,todo,T6.2.2,planning/tic
 T6.2.4,Task,Export KPI table and charts,SE6,S6.2,P2,1,S,8,done,T6.1.2,planning/tickets/se6_interface/T6.2.4_export_kpi_table_and_charts.md
 S7.1,Story,Repository documentation and release,SE7,SE7,,4,,,todo,,planning/tickets/se7_documentation_portfolio/S7.1_repository_documentation_and_release.md
 T7.1.1,Task,README,SE7,S7.1,P0,2,M,7,done,T5.2.5;T6.1.2,planning/tickets/se7_documentation_portfolio/T7.1.1_readme.md
-T7.1.2,Task,Model card and ODD-style documentation,SE7,S7.1,P1,1,S,8,todo,T4.2.3,planning/tickets/se7_documentation_portfolio/T7.1.2_model_card_and_odd_style.md
+T7.1.2,Task,Model card and ODD-style documentation,SE7,S7.1,P1,1,S,8,done,T4.2.3,planning/tickets/se7_documentation_portfolio/T7.1.2_model_card_and_odd_style.md
 T7.1.3,Task,Release and reproducibility check,SE7,S7.1,P0,1,S,7,todo,T7.1.1;T7.2.2,planning/tickets/se7_documentation_portfolio/T7.1.3_release_and_reproducibility_check.md
 S7.2,Story,Portfolio assets for operations hiring managers,SE7,SE7,,3.5,,,todo,,planning/tickets/se7_documentation_portfolio/S7.2_portfolio_assets_for_operations_hiring.md
 T7.2.1,Task,Figures and 5-slide summary,SE7,S7.2,P1,2,M,8,todo,T5.2.5;T6.2.1,planning/tickets/se7_documentation_portfolio/T7.2.1_figures_and_5_slide_summary.md

@@ -2,7 +2,7 @@
   "label": "Simulated, benchmark-parameterized. Not plant data.",
   "number_type": "RESULT",
   "frozen": "2026-11-18",
-  "git_sha_at_build": "7f800f8dafa0+dirty",
+  "git_sha_at_build": "32ac5a09e9e1+dirty",
   "sources": {
     "baseline": "reports/results_baseline.json",
     "scenarios": "results/<scenario>/*.parquet (python tasks.py scenarios)",
@@ -319,7 +319,7 @@
     "rule": "scenarios whose mean effect is at least 0.1% of baseline output"
   },
   "verification": {
-    "automated_tests": 222,
+    "automated_tests": 233,
     "analytic_checks": [
       {
         "name": "M/M/1 mean queue wait Wq (rho=0.5), min",
@@ -357,6 +357,26 @@
     ],
     "max_abs_rel_error": 0.01185361328124987,
     "all_theory_in_ci": true
+  },
+  "sensitivity": {
+    "source": "results/sensitivity.json, reports/sensitivity.md",
+    "n_perturbations": 24,
+    "constraint_unchanged_in_all": true,
+    "smed_beats_second_avi_in_all_speed_perturbations": true,
+    "smed_m50_range": [
+      0.2091978089199577,
+      0.2751212070437925
+    ],
+    "second_avi_range": [
+      0.0008682704996078637,
+      0.016516676603616276
+    ],
+    "largest_effects_pct": {
+      "Filler speed": 0.121403,
+      "Changeover durations": 0.086859,
+      "Batch size (6 batches; total volume moves with it)": 0.083797
+    },
+    "max_discretization_effect": 0.003963
   },
   "hypothesis_evidence": {
     "H1b_queue_wait_before_avi_min": {

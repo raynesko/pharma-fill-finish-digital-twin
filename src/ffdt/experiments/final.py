@@ -253,6 +253,31 @@ def verification() -> dict:
     }
 
 
+def sensitivity_summary() -> dict | None:
+    """Conclusions of the one-at-a-time sensitivity analysis (T5.2.2), added 2026-11-18."""
+    f = RESULTS / "sensitivity.json"
+    if not f.exists():
+        return None
+    d = json.loads(f.read_text(encoding="utf-8"))
+    t = pd.DataFrame(d["table"]).query("metric == 'good_per_ppt_hour'")
+    by = t.assign(a=t["rel_diff"].abs()).groupby("label")["a"].max().sort_values(ascending=False)
+    n = t[t["param"] == "sublot_n"]["rel_diff"].abs().max()
+    avi = [x["effects"]["sc01_avi_plus1"]["rel_diff"] for x in d["scenario_order"]]
+    smed = [x["effects"]["sc04_changeover_m50"]["rel_diff"] for x in d["scenario_order"]]
+    return {
+        "source": "results/sensitivity.json, reports/sensitivity.md",
+        "n_perturbations": int(t["name"].nunique()),
+        "constraint_unchanged_in_all": not d["bottleneck_flips"],
+        "smed_beats_second_avi_in_all_speed_perturbations": all(
+            x["smed_beats_avi"] for x in d["scenario_order"]
+        ),
+        "smed_m50_range": [min(smed), max(smed)],
+        "second_avi_range": [min(avi), max(avi)],
+        "largest_effects_pct": {k: float(v) for k, v in by.head(3).items()},
+        "max_discretization_effect": float(n),
+    }
+
+
 def build() -> dict:
     comp = pd.read_csv(RESULTS / "comparison.csv")
     ver = pd.read_csv(RESULTS / "bottleneck_verdicts.csv").set_index("scenario")
@@ -321,6 +346,7 @@ def build() -> dict:
             "rule": "scenarios whose mean effect is at least 0.1% of baseline output",
         },
         "verification": verification(),
+        "sensitivity": sensitivity_summary(),
         "hypothesis_evidence": ev,
         "hypotheses": hypotheses(ev, sc, bn, base),
         "errata": {
@@ -457,6 +483,7 @@ def portfolio(d: dict) -> str:
     cart = ev["H3a_cartoner_wait_staff_share"]["baseline"]
     refuted = [k for k, x in h.items() if "refuted" in x["verdict"]]
     count = {2: "Two", 3: "Three", 4: "Four", 5: "Five"}.get(len(refuted), str(len(refuted)))
+    sens = d.get("sensitivity")
     lines = [
         "# Resume bullets, pitch and interview Q&A",
         "",
@@ -541,6 +568,18 @@ def portfolio(d: dict) -> str:
         "For example, I expected staffing to matter only where the filler waited for staff; the "
         "waits were downstream. Pre-registering made that visible instead of letting me "
         "rationalize it. |",
+        "| Would the answer change with different assumptions? | "
+        + (
+            f"I moved {sens['n_perturbations'] // 2} parameters one at a time, two levels each "
+            "(±20%): the "
+            f"{bn['constraint']} stayed the constraint in every case, and changeover reduction beat "
+            f"a second AVI under every filler and AVI speed change "
+            f"({100 * sens['smed_m50_range'][0]:.0f}-{100 * sens['smed_m50_range'][1]:.0f}% vs at "
+            f"most {100 * sens['second_avi_range'][1]:.1f}%). Filler speed, changeover time and batch "
+            "size matter most, so that is where real data would pay off first. |"
+            if sens
+            else "Sensitivity analysis pending. |"
+        ),
         "| Did you find bugs? | Two, both from checks: parallel AVI units let a batch's last "
         "sub-lot overtake (spurious changeovers), and station reject counts were logged after "
         "the quality step. Both were fixed, documented as errata, and every run was repeated. |",
@@ -620,6 +659,17 @@ def readme(d: dict, template: str, app_url: str | None = None) -> str:
         "cart_wait": f"{100 * d['hypothesis_evidence']['H3a_cartoner_wait_staff_share']['baseline']:.0f}%",
         "n_tests": str(v["automated_tests"]),
         "max_err": f"{100 * v['max_abs_rel_error']:.1f}%",
+        "sens_line": (
+            f"- **Sensitivity** ([`reports/sensitivity.md`](reports/sensitivity.md)): "
+            f"{d['sensitivity']['n_perturbations'] // 2} parameters moved one at a time to two "
+            f"levels each (mostly ±20%). The {bn['constraint']} stays the constraint in every case, "
+            "and changeover reduction beats a second AVI under every filler and AVI speed change. "
+            "Filler speed, changeover time and batch size move output most. Sub-lot "
+            "discretization changes output by at most "
+            f"{100 * d['sensitivity']['max_discretization_effect']:.1f}%."
+            if d.get("sensitivity")
+            else "- **Sensitivity:** pending."
+        ),
     }
     out = re.sub(r"\{\{(\w+)\}\}", lambda m: val[m.group(1)], template)
     if "{{" in out:
