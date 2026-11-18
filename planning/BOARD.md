@@ -73,6 +73,6 @@ Progress: 65 / 73.5 estimated hours done (88%). P0: 59 / 61.5 h.
 | T6.2.4 | Export KPI table and charts | P2 | 1 | 8 | done | T6.1.2 |
 | T7.1.1 | README | P0 | 2 | 7 | done | T5.2.5, T6.1.2 |
 | T7.1.2 | Model card and ODD-style documentation | P1 | 1 | 8 | done | T4.2.3 |
-| T7.1.3 | Release and reproducibility check | P0 | 1 | 7 | todo | T7.1.1, T7.2.2 |
+| T7.1.3 | Release and reproducibility check | P0 | 1 | 7 | in_progress | T7.1.1, T7.2.2 |
 | T7.2.1 | Figures and 5-slide summary | P1 | 2 | 8 | in_progress | T5.2.5, T6.2.1 |
 | T7.2.2 | Resume bullets, pitch and interview Q&A | P0 | 1.5 | 7 | in_progress | T5.2.5, T5.2.1 |

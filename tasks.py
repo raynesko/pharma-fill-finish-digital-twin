@@ -15,7 +15,7 @@ TASKS = {
     "scenarios": [[PY, "-m", "ffdt.experiments.scenarios"]],
     "app": [[PY, "-m", "streamlit", "run", "app/streamlit_app.py"]],
 }
-# full pipeline from an empty results/ folder to reports/results_final.json (about 25 min on
+# full pipeline from an empty results/ folder to reports/results_final.json (about 10 min on
 # 16 cores; sensitivity is most of it). Fixed seeds, so the numbers reproduce exactly.
 TASKS["results"] = [
     [PY, "-m", f"ffdt.experiments.{m}"]
