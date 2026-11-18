@@ -25,7 +25,7 @@ base = api.baseline_levers()
 st.title("Fill-finish line what-if")
 st.caption(
     "SIMULATED, BENCHMARK-PARAMETERIZED LINE. NOT PLANT DATA. "
-    "Draft baseline: parameters are public-benchmark and engineering-judgment values "
+    "Baseline v1.0 (frozen): parameters are public-benchmark and engineering-judgment values "
     "(see docs/assumptions.md)."
 )
 

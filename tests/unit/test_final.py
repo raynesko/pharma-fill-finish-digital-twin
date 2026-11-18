@@ -45,3 +45,8 @@ def test_portfolio_is_rendered_from_the_frozen_json(d):
     assert final.portfolio(d) == text
     bullets = [ln for ln in text.splitlines() if ln[:2] in ("1.", "2.", "3.")]
     assert len(bullets) == 3 and all("simulated" in b.lower() for b in bullets)
+
+
+def test_readme_is_rendered_from_the_frozen_json(d):
+    template = (ROOT / "docs" / "portfolio" / "README.template.md").read_text(encoding="utf-8")
+    assert final.readme(d, template) == (ROOT / "README.md").read_text(encoding="utf-8")

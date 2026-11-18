@@ -568,6 +568,62 @@ def portfolio(d: dict) -> str:
 
 
 PORTFOLIO = ROOT / "docs" / "portfolio" / "resume_bullets.md"
+README_TEMPLATE = ROOT / "docs" / "portfolio" / "README.template.md"
+README = ROOT / "README.md"
+
+
+def readme(d: dict, template: str, app_url: str | None = None) -> str:
+    """README.md (T7.1.1): fill ``{{name}}`` placeholders in the template from the JSON."""
+    import re
+
+    b, bn, v = d["baseline"], d["bottleneck"], d["verification"]
+    sc = {r["scenario"]: r for r in d["scenarios"]}
+    m50 = sc["sc04_changeover_m50"]
+    rows = [
+        "| Option | Set | Effect (95% CI) | Holm-adjusted p | Practically significant (size ≥ 3%)? |",
+        "|---|---|---|---|---|",
+    ]
+    for r in d["scenarios"]:
+        rows.append(
+            f"| {r['plain_name']} | {r['set']} | {_p(r['pct_diff'])} ({_p(r['pct_ci_low'])} to "
+            f"{_p(r['pct_ci_high'])}) | {_holm(r['p_holm'])} | {'yes' if r['practical'] else 'no'} |"
+        )
+    refuted = [k for k, x in d["hypotheses"].items() if "refuted" in x["verdict"]]
+    app_line = (
+        f"**Try it:** [what-if app]({app_url}) (simulated, benchmark-parameterized)."
+        if app_url
+        else "**What-if app:** run `python tasks.py app` locally (see How to run); it lets a "
+        "non-technical user change batch size, staffing, equipment and changeover time and see "
+        "OEE, throughput, losses and queue times with confidence intervals."
+    )
+    val = {
+        "co_share": f"{100 * b['changeover_share']:.0f}%",
+        "blocked_share": f"{100 * b['blocked_share']:.0f}%",
+        "m50_pct": f"{100 * m50['pct_diff']:.1f}%",
+        "m50_ci": f"{100 * m50['pct_ci_low']:.1f}% to {100 * m50['pct_ci_high']:.1f}%",
+        "app_line": app_line,
+        "n_reps": str(b["n_reps"]),
+        "n_main": str(sum(r["set"] == "main" for r in d["scenarios"])),
+        "oee": f"{100 * b['line_oee']['mean']:.1f}%",
+        "oee_ci": f"{100 * b['line_oee']['ci_low']:.1f}% to {100 * b['line_oee']['ci_high']:.1f}%",
+        "gph": f"{b['good_per_ppt_hour']['mean']:,.0f}",
+        "lead": f"{b['mean_lead_time_h']['mean']:.0f}",
+        "constraint": bn["constraint"],
+        "n_methods": str(bn["methods_agreeing_of_4"]),
+        "sole_share": f"{100 * bn['constraint_sole_share']:.0f}%",
+        "secondary": bn["secondary"],
+        "scenario_table": "\n".join(rows),
+        "refuted": ", ".join(refuted[:-1]) + " and " + refuted[-1]
+        if len(refuted) > 1
+        else "".join(refuted),
+        "cart_wait": f"{100 * d['hypothesis_evidence']['H3a_cartoner_wait_staff_share']['baseline']:.0f}%",
+        "n_tests": str(v["automated_tests"]),
+        "max_err": f"{100 * v['max_abs_rel_error']:.1f}%",
+    }
+    out = re.sub(r"\{\{(\w+)\}\}", lambda m: val[m.group(1)], template)
+    if "{{" in out:
+        raise ValueError("unfilled placeholder in README template")
+    return out
 
 
 def write() -> dict:
@@ -576,6 +632,7 @@ def write() -> dict:
     (REPORTS / "scenario_findings.md").write_text(memo(d), encoding="utf-8")
     PORTFOLIO.parent.mkdir(parents=True, exist_ok=True)
     PORTFOLIO.write_text(portfolio(d), encoding="utf-8")
+    README.write_text(readme(d, README_TEMPLATE.read_text(encoding="utf-8")), encoding="utf-8")
     return d
 
 
