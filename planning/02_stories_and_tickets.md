@@ -552,14 +552,16 @@ _Story rollup: 2.5 h_
 - Story: S5.1
 - Description: Load, validate and run every scenario with the same replication seeds as baseline.
 - Acceptance criteria:
-  - [ ] Every scenario YAML validates
-  - [ ] Unchanged stations use identical random streams to baseline (test)
-  - [ ] Parquet results per scenario with config hash
-  - [ ] make scenarios runs everything and writes a run log
+  - [x] Every scenario YAML validates
+  - [x] Unchanged stations use identical random streams to baseline (test)
+  - [x] Parquet results per scenario with config hash
+  - [x] make scenarios runs everything and writes a run log
 - Dependencies: T5.1.1, T3.2.3, T3.2.4
 - Estimate: 1.5 h (S)
 - Priority: P0
 - Deliverable/artifact: src/ffdt/experiments/scenarios.py, results/<scenario>/, Makefile target scenarios
+
+**Note (2026-11-17):** the first full run exposed model erratum E1 (parallel AVI units let a batch's last sub-lot overtake an earlier one). Fixed in `src/ffdt/sim/machine.py` with a regression test; all scenarios re-run. Only sc01 and sc05 changed. See amendment E1 in `docs/scenario_matrix.md`.
 
 ---
 
@@ -586,15 +588,19 @@ _Story rollup: 8 h_
 - Story: S5.2
 - Description: Per-replication paired differences (scenario minus baseline), t-based 95% CI, bootstrap cross-check, Holm adjustment across scenarios, and a practical-significance threshold labeled as a target (suggested: 2 OEE points).
 - Acceptance criteria:
-  - [ ] Table: scenario, metric, mean difference, 95% CI, Holm-adjusted p, practical-significance flag
-  - [ ] Paired vs unpaired CI width shown to demonstrate CRN benefit
-  - [ ] Bootstrap CI agrees with t-CI within a stated tolerance
-  - [ ] Unit test: synthetic data with a known difference is recovered
-  - [ ] Which comparisons were pre-registered is stated
+  - [x] Table: scenario, metric, mean difference, 95% CI, Holm-adjusted p, practical-significance flag
+  - [x] Paired vs unpaired CI width shown to demonstrate CRN benefit
+  - [x] Bootstrap CI agrees with t-CI within a stated tolerance
+  - [x] Unit test: synthetic data with a known difference is recovered
+  - [x] Which comparisons were pre-registered is stated
 - Dependencies: T5.1.2
 - Estimate: 2 h (M)
 - Priority: P0
 - Deliverable/artifact: src/ffdt/experiments/stats.py, notebooks/06_scenarios.ipynb, tests/unit/test_stats.py
+
+**Note (2026-11-17), bootstrap criterion not met as written:** the stated tolerance is `BOOT_TOL = 0.15` (each bootstrap CI end within 15% of the paired t half-width). Agreement holds in 9 of 11 primary-metric rows and 54 of 77 rows overall. The misses are almost all degenerate differences (the lever never binds: +1 mechanic, plus or minus 1 inspector, wait-for-staff share, with 93% of differences exactly 0), where the t-interval's normality assumption fails. On the primary metric both intervals reach the same conclusion everywhere. One secondary row changes conclusion (inspector minus 1, lead time) and is reported as inconclusive. Disagreements are flagged per row (`boot_agrees`, `zero_diff_frac` in `results/comparison.csv`) and discussed in `notebooks/06_scenarios.ipynb`. Owner decision needed: accept "agrees within tolerance, or the disagreement is flagged and explained", or require a different treatment.
+
+**Owner decision (2026-11-18):** accepted. The criterion is read as "agrees within the stated tolerance, or the disagreement is flagged per row and explained". The criterion text is left unchanged; this note records the interpretation.
 
 **[T5.2.2] Sensitivity analysis**
 - Type: Task
