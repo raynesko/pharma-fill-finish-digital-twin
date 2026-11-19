@@ -51,7 +51,7 @@ Sterile fill-finish lines are capital-intensive and tightly regulated, and the u
 ## How to run
 Requires Python 3.12. On Windows use `python tasks.py <task>` (no `make`); elsewhere `make <task>` works too.
 ```
-git clone <repo-url> && cd 01_pharma_fill_finish_digital_twin
+git clone https://github.com/raynesko/pharma-fill-finish-digital-twin.git && cd pharma-fill-finish-digital-twin
 python -m venv .venv
 .venv/Scripts/pip install -r requirements-dev.txt && .venv/Scripts/pip install -e .   # Linux/macOS: .venv/bin/
 .venv/Scripts/python tasks.py test        # fast test suite (about 1 min)

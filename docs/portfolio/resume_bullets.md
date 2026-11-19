@@ -33,4 +33,4 @@ Alternative bullet (process-improvement roles):
 | What are the limits? | One line, liquid vials, one week and product mix, no lyophilization, sterility-test holds or deviations, no costs. Ranking is by output, not ROI. |
 
 ## LinkedIn project entry
-**Pharma Fill-Finish Digital Twin (Discrete-Event Simulation).** A simulation of a sterile vial fill-finish line that finds the bottleneck and ranks improvement options with confidence intervals: the filler limits output, and changeover reduction beat adding inspection capacity. *Simulated line parameterized from public benchmarks; no plant data.* [app link] · [repo link]
+**Pharma Fill-Finish Digital Twin (Discrete-Event Simulation).** A simulation of a sterile vial fill-finish line that finds the bottleneck and ranks improvement options with confidence intervals: the filler limits output, and changeover reduction beat adding inspection capacity. *Simulated line parameterized from public benchmarks; no plant data.* [app link] · [repo](https://github.com/raynesko/pharma-fill-finish-digital-twin)

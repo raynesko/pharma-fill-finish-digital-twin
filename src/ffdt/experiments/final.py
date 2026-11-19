@@ -599,7 +599,8 @@ def portfolio(d: dict) -> str:
         "sterile vial fill-finish line that finds the bottleneck and ranks improvement options "
         f"with confidence intervals: the {bn['constraint']} limits output, and changeover "
         f"reduction beat adding inspection capacity. *Simulated line parameterized from public "
-        "benchmarks; no plant data.* [app link] · [repo link]",
+        "benchmarks; no plant data.* [app link] · "
+        "[repo](https://github.com/raynesko/pharma-fill-finish-digital-twin)",
         "",
     ]
     pitch = next(ln for ln in lines if ln.startswith("> "))

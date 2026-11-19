@@ -2,7 +2,7 @@
   "label": "Simulated, benchmark-parameterized. Not plant data.",
   "number_type": "RESULT",
   "frozen": "2026-11-18",
-  "git_sha_at_build": "8c586e93781b+dirty",
+  "git_sha_at_build": "4772ae9433d5+dirty",
   "sources": {
     "baseline": "reports/results_baseline.json",
     "scenarios": "results/<scenario>/*.parquet (python tasks.py scenarios)",
