@@ -878,7 +878,7 @@ _Story rollup: 4 h_
 - Description: Fresh clone, fresh venv, make all reproduces results_final.json. Close out the backlog.
 - Acceptance criteria:
   - [x] make all reproduces results_final.json exactly with the fixed seeds
-  - [ ] Tag v1.0.0 created; LICENSE present; repo description and topics set
+  - [x] Tag v1.0.0 created; LICENSE present; repo description and topics set
   - [ ] All ticket statuses updated and tools/build_index.py --check passes
 - Dependencies: T7.1.1, T7.2.2
 - Estimate: 1 h (S)
@@ -893,6 +893,8 @@ _Story rollup: 4 h_
 - Draft topics: discrete-event-simulation, simpy, oee, operations-research, pharmaceutical-manufacturing, theory-of-constraints, smed, streamlit, industrial-engineering, process-improvement.
 - Remaining owner steps: create the GitHub repo, push, `git tag v1.0.0 && git push --tags`, set description and topics.
 - **Reproduction verified 2026-11-18:** fresh clone of c12f18f, fresh venv, `python tasks.py all`: lint clean, 241 tests passed (1 skipped: needs `results/`, which is empty before the pipeline; passes after), full pipeline 596 s on 16 cores. `results_final.json` identical except `git_sha_at_build`; every other generated report byte-identical (slides.pdf differs only in its embedded timestamp).
+- **Published 2026-11-18 (owner's request):** public repo https://github.com/raynesko/pharma-fill-finish-digital-twin, tags `v1.0.0` and `baseline-v1.0` pushed, description and 10 topics set. Commit authors were rewritten to the owner's GitHub noreply address before the first push (owner's choice); the `baseline-v1.0` tag moved with the rewrite (same tree). The first CI run failed on a Windows-only pin (`pywinpty`); marked `sys_platform == "win32"`, and CI (lint, index check, fast and slow tests on Ubuntu) now passes.
+- Still open: "All ticket statuses updated" means closing out the backlog, which waits on T7.2.2 and T7.2.1 (timed run-throughs), T6.2.3 (deploy and usability test) and T4.2.2 (practitioner review).
 
 ---
 
